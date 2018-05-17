@@ -1,1 +1,4 @@
 ite-ue-main.cc 注释掉rece
+
+2018.5.17  lte-ue-main.cc 的 phy_interface_mac类，在common头文件中已经被注释掉了
+
