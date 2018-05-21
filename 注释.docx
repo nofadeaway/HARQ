@@ -1,3 +1,9 @@
+本层的PDU为下层的SDU；本层的SDU为上层的PDU
+SDU服务数据单元，对应于某个子层中没有被处理的数据。对于某个子层而言，进来的是SDU。
+PDU协议数据单元，对应于被该子层处理形成特定格式的数据。对于某个子层而言，出去的就是PDU.
+ 所以说，在MAC层，RLC来的是SDU，PDU是封装后要交给物理层的。
+
+
 ite-ue-main.cc 注释掉rece
 
 2018.5.17  lte-ue-main.cc 的 phy_interface_mac类，在common头文件中已经被注释掉了
