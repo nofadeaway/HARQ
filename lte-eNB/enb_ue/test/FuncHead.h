@@ -22,11 +22,11 @@
 #include <linux/if_tun.h>
 #include <fcntl.h>
 
-#include "common/log_stdout.h"
-#include "common/interfaces.h"
-#include "upper/rlc_um.h"
-#include "mac/mux.h"
-#include "mac/demux.h"
+#include "../hdr/common/log_stdout.h"
+#include "../hdr/common/interfaces.h"
+#include "../hdr/upper/rlc_um.h"
+#include "../hdr/mac/mux.h"
+#include "../hdr/mac/demux.h"
 class mac_dummy_timers
 	:public srslte::mac_interface_timers
 {

@@ -3,14 +3,14 @@
 using namespace srslte;
 using namespace srsue;
  
-pthread_t id[3];//3¸öÏß³Ì
+pthread_t id[3];//3ä¸ªçº¿ç¨‹
 
 rlc_um rlc3; 
 mac_dummy_timers timers_test; 
 mux ue_mux_test;
 demux mac_demux_test;
  
-int tun_fd;// option;È«¾Ö±äÁ¿--rlcĞ´ÈëipÊ±ÓÃ
+int tun_fd;// option;å…¨å±€å˜é‡--rlcå†™å…¥ipæ—¶ç”¨
 
 /**************************************************************************
 * rlc-class
@@ -48,7 +48,7 @@ public:
 	{if(lcid==3){
 		return rlc3.get_buffer_state();
 	}
-	//else{//lcid==4ÒÔ¼°ÆäËû
+	//else{//lcid==4ä»¥åŠå…¶ä»–
 	//	return rlc4.get_buffer_state();
 	//}	
 	}
@@ -65,7 +65,7 @@ public:
 		if(lcid==3){
 			len=rlc3.read_pdu(payload,nof_bytes);
 		}
-		//else{//lcid==4ÒÔ¼°ÆäËû
+		//else{//lcid==4ä»¥åŠå…¶ä»–
 			//len=rlc4.read_pdu(payload,nof_bytes);printf("HERE4444\n");
 		//}
 		return len;
@@ -78,7 +78,7 @@ public:
 		if (lcid == 3) {
 
 			rlc3.write_pdu(payload, nof_bytes); 
-		}//else{//lcid==4ÒÔ¼°ÆäËû
+		}//else{//lcid==4ä»¥åŠå…¶ä»–
 		 //rlc4.write_pdu(payload,nof_bytes);printf("HERE4444\n");
 		 //}	
 	}
@@ -93,7 +93,7 @@ void thread_create(void){
 	memset(&id, 0, sizeof(id));
 
 	if ((temp = pthread_create(&id[0], NULL, lte_send_ip_3, NULL) != 0))
-		//²ÎÊı£ºÏß³Ì±êÊ¶·ûÖ¸Õë Ïß³ÌÊôĞÔ  Ïß³ÌÔËĞĞº¯ÊıÆğÊ¼µØÖ·  ÔËĞĞº¯ÊıÊôĞÔ;´´½¨³É¹¦·µ»Ø 0
+		//å‚æ•°ï¼šçº¿ç¨‹æ ‡è¯†ç¬¦æŒ‡é’ˆ çº¿ç¨‹å±æ€§  çº¿ç¨‹è¿è¡Œå‡½æ•°èµ·å§‹åœ°å€  è¿è¡Œå‡½æ•°å±æ€§;åˆ›å»ºæˆåŠŸè¿”å› 0
 		printf("Thread 1 lte_send_ip_3 fail to create!\n");
 	else
 		printf("Thread 1 lte_send_ip_3 created\n");
@@ -114,7 +114,7 @@ void thread_wait()
 {
 	if (id[0] != 0)
 	{
-		pthread_join(id[0], NULL); //µÈ´ıÏß³Ì½áÊø£¬Ê¹ÓÃ´Ëº¯Êı¶Ô´´½¨µÄÏß³Ì×ÊÔ´»ØÊÕ
+		pthread_join(id[0], NULL); //ç­‰å¾…çº¿ç¨‹ç»“æŸï¼Œä½¿ç”¨æ­¤å‡½æ•°å¯¹åˆ›å»ºçš„çº¿ç¨‹èµ„æºå›æ”¶
 		printf("Thread1 lte_send_ip_3 completed!\n");
 	}
 	if (id[1] != 0)
@@ -139,7 +139,7 @@ int main(void)
 	* tun_alloc
 	******************************************/
 	char tun_name[IFNAMSIZ];
-	int  flags = IFF_TUN;//»òÕßIFF_TAP
+	int  flags = IFF_TUN;//æˆ–è€…IFF_TAP
 
 	// Connect to the device 
 	strcpy(tun_name, "tun3");
@@ -193,8 +193,8 @@ int main(void)
 	log1.set_level(srslte::LOG_LEVEL_DEBUG);
 	log1.set_hex_limit(-1);  
 
-	phy_interface_mac phy_interface_mac_test;//ÎïÀí²ãÓëmac½Ó¿Ú--/ue/hdr/phy_interface
-	//srslte::timers timers_test;//ÕâÊÇÉ¶---ÆÁ±ÎµôÁË,ÔÚMAC CE´¦Àí³öÓĞÓÃ
+	phy_interface_mac phy_interface_mac_test;//ç‰©ç†å±‚ä¸macæ¥å£--/ue/hdr/phy_interface
+	//srslte::timers timers_test;//è¿™æ˜¯å•¥---å±è”½æ‰äº†,åœ¨MAC CEå¤„ç†å‡ºæœ‰ç”¨
 	log1.set_level(srslte::LOG_LEVEL_DEBUG);
 
 	mac_demux_test.init(&phy_interface_mac_test, &rlc_test, &log1);//,&timers_test);

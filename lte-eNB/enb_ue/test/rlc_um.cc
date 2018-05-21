@@ -165,14 +165,14 @@ uint32_t rlc_um::get_total_buffer_state()
   return get_buffer_state();
 }
 
-int rlc_um::read_pdu(uint8_t *payload, uint32_t nof_bytes)
+int rlc_um::read_pdu(uint8_t *payload, uint32_t nof_bytes)  //payload带回最终组装的rlc_pdu包，nof_bytes为MAC给RLC反馈的包长度，返回值len为实际组包的长度
 {
   log->debug("MAC opportunity - %d bytes\n", nof_bytes);
  // log->debug("NOW--HERE\n");
   return build_data_pdu(payload, nof_bytes);
 }
 
-void rlc_um::write_pdu(uint8_t *payload, uint32_t nof_bytes)///////////////////////////////
+void rlc_um::write_pdu(uint8_t *payload, uint32_t nof_bytes)//msg记录的是数据包的地址，len为待处理数据包的长度。调用该函数后，程序会将数据包（msg记录的数据）送到RLC解包程序
 {
   boost::lock_guard<boost::mutex> lock(mutex);
   handle_data_pdu(payload, nof_bytes);

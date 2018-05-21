@@ -3,14 +3,14 @@
 using namespace srslte;
 using namespace srsue;
  
-pthread_t id[3];//3���߳�
+pthread_t id[3];//3个线程
 
 rlc_um rlc3; 
 mux ue_mux_test;
 demux mac_demux_test;
 mac_dummy_timers timers_test;
  
-int tun_fd;// option;ȫ�ֱ���--rlcд��ipʱ��
+int tun_fd;// option;全局变量--rlc写入ip时用
 
 /**************************************************************************
 * rlc-class
@@ -46,7 +46,7 @@ public:
 	{if(lcid==3){
 		return rlc3.get_buffer_state();
 	}
-	//else{//lcid==4�Լ�����
+	//else{//lcid==4以及其他
 	//	return rlc4.get_buffer_state();
 	//}	
 	}
@@ -63,7 +63,7 @@ public:
 		if(lcid==3){
 			len=rlc3.read_pdu(payload,nof_bytes);
 		}
-		//else{//lcid==4�Լ�����
+		//else{//lcid==4以及其他
 			//len=rlc4.read_pdu(payload,nof_bytes);printf("HERE4444\n");
 		//}
 		return len;
@@ -76,7 +76,7 @@ public:
 		if (lcid == 3) {
 
 			rlc3.write_pdu(payload, nof_bytes);
-		}//else{//lcid==4�Լ�����
+		}//else{//lcid==4以及其他
 		 //rlc4.write_pdu(payload,nof_bytes);printf("HERE4444\n");
 		 //}	
 	}
@@ -91,7 +91,7 @@ void thread_create(void){
 	memset(&id, 0, sizeof(id));
 
 	if ((temp = pthread_create(&id[0], NULL, lte_send_ip_3, NULL) != 0))
-		//�������̱߳�ʶ��ָ�� �߳�����  �߳����к�����ʼ��ַ  ���к�������;�����ɹ����� 0
+		//参数：线程标识符指针 线程属性  线程运行函数起始地址  运行函数属性;创建成功返回 0
 		printf("Thread 1 lte_send_ip_3 fail to create!\n");
 	else
 		printf("Thread 1 lte_send_ip_3 created\n");
@@ -112,7 +112,7 @@ void thread_wait()
 {
 	if (id[0] != 0)
 	{
-		pthread_join(id[0], NULL); //�ȴ��߳̽�����ʹ�ô˺����Դ������߳���Դ����
+		pthread_join(id[0], NULL); //等待线程结束，使用此函数对创建的线程资源回收
 		printf("Thread1 lte_send_ip_3 completed!\n");
 	}
 	if (id[1] != 0)
@@ -137,7 +137,7 @@ int main(void)
 	* tun_alloc
 	******************************************/
 	char tun_name[IFNAMSIZ];
-	int  flags = IFF_TUN;//����IFF_TAP
+	int  flags = IFF_TUN;//或者IFF_TAP
 
 	// Connect to the device 
 	strcpy(tun_name, "tun3");
@@ -191,8 +191,8 @@ int main(void)
 	log1.set_level(srslte::LOG_LEVEL_DEBUG);
 	log1.set_hex_limit(-1);  
 
-	phy_interface_mac phy_interface_mac_test;//�������mac�ӿ�--/ue/hdr/phy_interface
-	//srslte::timers timers_test;//����ɶ---���ε���,��MAC CE���������
+	phy_interface_mac phy_interface_mac_test;//物理层与mac接口--/ue/hdr/phy_interface
+	//srslte::timers timers_test;//这是啥---屏蔽掉了,在MAC CE处理出有用
 	log1.set_level(srslte::LOG_LEVEL_DEBUG);
 
 	mac_demux_test.init(&phy_interface_mac_test, &rlc_test, &log1);//,&timers_test);

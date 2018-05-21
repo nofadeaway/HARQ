@@ -11,7 +11,7 @@ extern rlc_um rlc3;
 extern int tun_fd; 
 
 /**************************************************************************
-* lte_send_ip_3:´ÓtunÖĞ¶ÁÊı¾İ²¢Ñ¹Èë¶ÓÁĞ
+* lte_send_ip_3:ä»tunä¸­è¯»æ•°æ®å¹¶å‹å…¥é˜Ÿåˆ—
 **************************************************************************/
 
 void* lte_send_ip_3(void *ptr) {
@@ -27,7 +27,7 @@ void* lte_send_ip_3(void *ptr) {
 	/*****************************************
 	* read from tun and write to rlc
 	******************************************/	
-	byte_buffer_t sdu_bufs[1000];//ÔİÊ±¶¨Îª1000´ÎÒÔÄÚ¶ÁĞ´±ØÈ»²»»áÖØµş
+	byte_buffer_t sdu_bufs[1000];//æš‚æ—¶å®šä¸º1000æ¬¡ä»¥å†…è¯»å†™å¿…ç„¶ä¸ä¼šé‡å 
  
 	int k = 0;
 	uint8_t ipClient1[4]={192,168,2,1};
@@ -39,7 +39,7 @@ void* lte_send_ip_3(void *ptr) {
 		if(k == 1000){
 			k = 0;
 		}  
-		//data from tun/tap: Ïë¶ÁÈ¡sizeof(buffer)¸öÊı¾İ,³É¹¦Ôò·µ»Ø¶ÁÈ¡µÄÊµ¼Ê×Ö½ÚÊınread
+		//data from tun/tap: æƒ³è¯»å–sizeof(buffer)ä¸ªæ•°æ®,æˆåŠŸåˆ™è¿”å›è¯»å–çš„å®é™…å­—èŠ‚æ•°nread
 		nread = read(tun_fd, buffer[k], BUFSIZE);
  
 		if (nread <= 0) {
@@ -55,7 +55,7 @@ void* lte_send_ip_3(void *ptr) {
 			rlc3.write_sdu(&sdu_bufs[k]);
 		}//else if((buffer[k][dst_ip_start]==192) && (buffer[k][dst_ip_start+1]==168) && (buffer[k][dst_ip_start+2]==2) && (buffer[k][dst_ip_start+3]==2))
 
-		sleep(1);  //linuxÏÂ \sleep(),ÀïÃæ±äÁ¿µ¥Î»ÊÇÃë
+		sleep(1);  //linuxä¸‹ \sleep(),é‡Œé¢å˜é‡å•ä½æ˜¯ç§’
 		k++;	
 	}
 }
