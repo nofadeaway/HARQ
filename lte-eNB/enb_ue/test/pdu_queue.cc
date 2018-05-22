@@ -40,9 +40,20 @@ pdu_queue::pdu_queue() : pdu_q(NOF_HARQ_PID)
   callback = NULL; 
 }
 
-void pdu_queue::init(process_callback *callback_, log* log_h_)
+// 原来的程序
+// void pdu_queue::init(process_callback *callback_, log* log_h_)
+// {
+//   callback  = callback_;
+//   log_h     = log_h_; 
+//   for (int i=0;i<NOF_HARQ_PID;i++) {
+//     pdu_q[i].init(NOF_BUFFER_PDUS, MAX_PDU_LEN);
+//   }
+//   initiated = true; 
+// }
+
+void pdu_queue::init(log* log_h_)
 {
-  callback  = callback_;
+  //callback  = callback_;
   log_h     = log_h_; 
   for (int i=0;i<NOF_HARQ_PID;i++) {
     pdu_q[i].init(NOF_BUFFER_PDUS, MAX_PDU_LEN);
@@ -118,9 +129,10 @@ bool pdu_queue::process_pdus()
     do {
       buff = (uint8_t*) pdu_q[i].pop(&len);
       if (buff) {
-        if (callback) {
-          callback->process_pdu(buff, len);
-        }
+        //注释掉了
+        // if (callback) {
+        //   callback->process_pdu(buff, len);
+        // }
         pdu_q[i].release();
         cnt++;
         have_data = true;

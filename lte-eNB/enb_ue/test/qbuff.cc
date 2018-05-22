@@ -30,7 +30,7 @@
 #include <stdio.h>
 
 #include "srslte/utils/vector.h"
-#include "common/qbuff.h"
+#include "../hdr/common/qbuff.h"
 
 namespace srslte {
   
@@ -51,7 +51,7 @@ qbuff::~qbuff()
   free(packets);
 }
 
-bool qbuff::init(uint32_t nof_messages_, uint32_t max_msg_size_)  //nof_messages为64--nof_PDU
+bool qbuff::init(uint32_t nof_messages_, uint32_t max_msg_size_)  //nof_messages为64--nof_PDU,一个HARQ进程最多缓存多少个PDU；max_msg_size为单个PDU的最大长度
 {
   nof_messages = nof_messages_; 
   max_msg_size = max_msg_size_; 
@@ -59,7 +59,7 @@ bool qbuff::init(uint32_t nof_messages_, uint32_t max_msg_size_)  //nof_messages
   buffer  = (uint8_t*) srslte_vec_malloc(nof_messages*max_msg_size);  
   packets = (pkt_t*)   srslte_vec_malloc(nof_messages*sizeof(pkt_t));  
   if (buffer && packets) {
-    bzero(buffer, nof_messages*max_msg_size);
+    bzero(buffer, nof_messages*max_msg_size);   //bzero 将字节字符串前n个字节置为0
     bzero(packets, nof_messages*sizeof(pkt_t));
     flush();
     return true; 
