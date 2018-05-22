@@ -204,7 +204,7 @@ bool bsr_is_inserted = false;
   uint8_t *ret = pdu_msg.write_packet(log_h);          //pdu.cc 114
 printf("------------end_pdu_get----------------\n");
 printf("---------------------------------------\n");
- // pid_has_bsr[pid%MAX_HARQ_PROC] = bsr_is_inserted; 
+ //pid_has_bsrpid_has_bsr[pid%MAX_HARQ_PROC] = bsr_is_inserted; 
  // if (bsr_is_inserted) {
  //   bsr_procedure->set_tx_tti(tx_tti);
  // }

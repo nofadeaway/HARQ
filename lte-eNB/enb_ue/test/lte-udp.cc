@@ -23,14 +23,14 @@ void* lte_send_udp(void *ptr) {
 	memset(&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
-	addr.sin_addr.s_addr = inet_addr("192.168.3.1");//Ä¿µÄÊµ¼ÊµØÖ·
+	addr.sin_addr.s_addr = inet_addr("192.168.3.1");//ç›®çš„å®é™…åœ°å€
 
 	uint8_t *payload_test = new uint8_t[SEND_SIZE];
 	uint8_t *payload_back = new uint8_t[SEND_SIZE];
 
-	uint32_t pdu_sz_test = 300;//ÏÂÃæÆäÊµÓ¦¸Ã·¢ËÍ×îÖÕ´ò°ü³¤¶È°É£¬´ıĞŞ¸Ä
+	uint32_t pdu_sz_test = 300;//ä¸‹é¢å…¶å®åº”è¯¥å‘é€æœ€ç»ˆæ‰“åŒ…é•¿åº¦å§ï¼Œå¾…ä¿®æ”¹
 	uint32_t tx_tti_test = 1;
-	uint32_t pid_test = 1;
+	uint32_t pid_test = 1; //ç›®å‰æš‚æ—¶åªæœ‰1ä¸ªè¿›ç¨‹
 
 	while (1) {
 		
@@ -40,6 +40,7 @@ void* lte_send_udp(void *ptr) {
 	     	//uint8_t* mux::pdu_get(uint8_t *payload, uint32_t pdu_sz, uint32_t tx_tti, uint32_t pid)
 		
 		payload_back = ue_mux_test.pdu_get(payload_test, pdu_sz_test, tx_tti_test, pid_test);
+		//5.22æ·»åŠ 
 
 
 		if (sendto(st, payload_back, pdu_sz_test, 0, (struct sockaddr *) &addr,

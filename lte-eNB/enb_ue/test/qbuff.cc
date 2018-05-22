@@ -51,12 +51,12 @@ qbuff::~qbuff()
   free(packets);
 }
 
-bool qbuff::init(uint32_t nof_messages_, uint32_t max_msg_size_)
+bool qbuff::init(uint32_t nof_messages_, uint32_t max_msg_size_)  //nof_messages为64--nof_PDU
 {
   nof_messages = nof_messages_; 
   max_msg_size = max_msg_size_; 
   
-  buffer  = (uint8_t*) srslte_vec_malloc(nof_messages*max_msg_size);
+  buffer  = (uint8_t*) srslte_vec_malloc(nof_messages*max_msg_size);  
   packets = (pkt_t*)   srslte_vec_malloc(nof_messages*sizeof(pkt_t));  
   if (buffer && packets) {
     bzero(buffer, nof_messages*max_msg_size);

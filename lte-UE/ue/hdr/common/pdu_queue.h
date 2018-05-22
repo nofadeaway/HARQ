@@ -43,7 +43,8 @@ public:
   class process_callback
   {
     public: 
-      virtual void process_pdu(uint8_t *buff, uint32_t len) = 0;
+      //virtual void process_pdu(uint8_t *buff, uint32_t len) = 0;  //程序中原有的 
+      std::vector<bool> pro_callback_ACK(NOF_HARQ_PID,,false);     //自己加的用于ACK
   };
 
   pdu_queue();

@@ -26,3 +26,10 @@ public:
     public: 
       virtual void process_pdu(uint8_t *buff, uint32_t len) = 0;
   };  //这个纯虚函数是干啥的...
+  5.22 修改了 pdu_queue.h 为:
+  public: 
+      //virtual void process_pdu(uint8_t *buff, uint32_t len) = 0;
+      std::vector<bool> pro_callback(NOF_HARQ_PID,,false);     //自己加的用于ACK
+  };
+
+  修改了ite-udp
