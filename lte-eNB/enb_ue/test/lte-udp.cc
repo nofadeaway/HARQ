@@ -41,6 +41,7 @@ void* lte_send_udp(void *ptr) {
 		
 		payload_back = ue_mux_test.pdu_get(payload_test, pdu_sz_test, tx_tti_test, pid_test);
 		//5.22添加
+		
 
 
 		if (sendto(st, payload_back, pdu_sz_test, 0, (struct sockaddr *) &addr,

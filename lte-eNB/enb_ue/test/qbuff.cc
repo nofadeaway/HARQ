@@ -30,7 +30,7 @@
 #include <stdio.h>
 
 #include "srslte/utils/vector.h"
-#include "../hdr/common/qbuff.h"
+#include "common/qbuff.h"
 
 namespace srslte {
   

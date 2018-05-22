@@ -48,6 +48,7 @@ public:
 
   pdu_queue();
   void init(process_callback *callback, log* log_h_);
+  //void pdu_queue::init(log* log_h_);   //自己加的 5.22
 
   bool     process_pdus();
   uint8_t* request_buffer(uint32_t pid, uint32_t len);
