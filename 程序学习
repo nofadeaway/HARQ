@@ -1,0 +1,1 @@
+实质是main中的thread_create()创建了3个线程在跑 lte-ip-pkt   lte-dup  lte-rece
