@@ -10,3 +10,19 @@ ite-ue-main.cc 注释掉rece
 
 pdu_queue::pdu_queue.h 62行 std::vector<qbuff> pdu_q;    //PDU buffer
 class qbuff 定义于qbuff.h
+
+5.21  目前思路，在组包MUX的输出PDU存入PDU_queue,实现PDU_queue和DL_Harq的pid，在UE端做一个回复ACK的程序。
+      common 46行 被注释掉了。
+      mux.cc  203行uint8_t *ret = pdu_msg.write_packet(log_h);将PDU存入了buffer，涉及了srslte::sch_pdu pdu_msg;
+      srslte::sch_pdu 定义于common的266行，该类的具体函数写在pdu.cc中
+
+      namespace srslte {
+
+class pdu_queue
+{
+public:
+  class process_callback
+  {
+    public: 
+      virtual void process_pdu(uint8_t *buff, uint32_t len) = 0;
+  };  //这个纯虚函数是干啥的...
