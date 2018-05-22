@@ -1,1 +1,16 @@
 实质是main中的thread_create()创建了3个线程在跑 lte-ip-pkt   lte-dup  lte-rece
+
+
+class demux : public srslte::pdu_queue::process_callback  demux是pdu_queue的继承类   在mac/demux.h中
+
+5.22   
+DEBUG:
+
+error: cannot declare variable ‘callback_test’ to be of abstract type ‘srslte::pdu_queue::process_callback’
+pdu_queue::process_callback callback_test;
+
+/home/fx/HARQ/lte-eNB/enb_ue/test/lte-ue-main.cc:200：对‘srslte::pdu_queue::process_callback::process_callback()’未定义的引用
+demux.o：在函数‘srsue::demux::demux()’中：
+/home/fx/HARQ/lte-eNB/enb_ue/test/demux.cc:11：对‘srslte::pdu_queue::process_callback::process_callback()’未定义的引用
+pdu_queue.o：在函数‘srslte::pdu_queue::process_pdus()’中：
+/home/fx/HARQ/lte-eNB/enb_ue/test/pdu_queue.cc:135：对‘srslte::pdu_queue::process_callback::process_pdu(unsigned char*, unsigned int)’未定义的引用

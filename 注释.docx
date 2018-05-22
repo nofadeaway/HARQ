@@ -34,4 +34,6 @@ public:
 
   修改了ite-udp
 
-  修改了pdu_queue.cc程序 将init程序改了
+  修改了pdu_queue.cc和pdu_queue.h
+
+

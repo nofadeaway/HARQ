@@ -3,7 +3,7 @@
 #define Info(fmt, ...)    log_h->info_line(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
 #define Debug(fmt, ...)   log_h->debug_line(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
 
-//#include "mac/mac.h"----ÐÞ¸Ä
+//#include "mac/mac.h"----ä¿®æ”¹
 #include "mac/demux.h"
 
 namespace srsue {
@@ -12,13 +12,13 @@ demux::demux() : mac_msg(20), pending_mac_msg(20)
 {
 }
 
-//³õÊ¼»¯½â°üÊµÌå
-void demux::init(phy_interface_mac* phy_h_, rlc_interface_mac *rlc_, srslte::log* log_h_)//ÐÞ¸Ä, srslte::timers* timers_db_)
+//åˆå§‹åŒ–è§£åŒ…å®žä½“
+void demux::init(phy_interface_mac* phy_h_, rlc_interface_mac *rlc_, srslte::log* log_h_)//ä¿®æ”¹, srslte::timers* timers_db_)
 {
   phy_h     = phy_h_; 
   log_h     = log_h_; 
   rlc       = rlc_;  
-  //timers_db = timers_db_;ÐÞ¸Ä
+  //timers_db = timers_db_;ä¿®æ”¹
   pdus.init(this, log_h);
 }
 
@@ -98,7 +98,7 @@ void demux::push_pdu(uint32_t pid, uint8_t *buff, uint32_t nof_bytes)
     * require ACK feedback to be transmitted quickly. 
     */
     Debug("Pushed BCCH MAC PDU in transparent mode\n");
-    //rlc->write_pdu_bcch_dlsch(buff, nof_bytes);ÐÞ¸Ä
+    //rlc->write_pdu_bcch_dlsch(buff, nof_bytes);ä¿®æ”¹
   } else {
     Error("Pushed buffer for invalid PID=%d\n", pid);
   }  
@@ -122,7 +122,7 @@ void demux::process_pdu(uint8_t *mac_pdu, uint32_t nof_bytes)
   Debug("MAC PDU processed\n");
 }
 
-void demux::process_sch_pdu(srslte::sch_pdu *pdu_msg)////////////////Ö÷Òª½â°ü³ÌÐò
+void demux::process_sch_pdu(srslte::sch_pdu *pdu_msg)////////////////ä¸»è¦è§£åŒ…ç¨‹åº
 {  
   while(pdu_msg->next()) {
     if (pdu_msg->get()->is_sdu()) {	
@@ -132,7 +132,7 @@ void demux::process_sch_pdu(srslte::sch_pdu *pdu_msg)////////////////Ö÷Òª½â°ü³ÌÐ
       // Route logical channel 
       Info("Delivering PDU for lcid=%d, %d bytes\n", pdu_msg->get()->get_sdu_lcid(), pdu_msg->get()->get_payload_size());
       rlc->write_pdu(pdu_msg->get()->get_sdu_lcid(), pdu_msg->get()->get_sdu_ptr(), pdu_msg->get()->get_payload_size());      
-    } //else {//²»½â¿ØÖÆÐÅÏ¢°ü
+    } //else {//ä¸è§£æŽ§åˆ¶ä¿¡æ¯åŒ…
       // Process MAC Control Element
     // if (!process_ce(pdu_msg->get())) {
         //Warning("Received Subheader with invalid or unkonwn LCID\n");
@@ -141,19 +141,19 @@ void demux::process_sch_pdu(srslte::sch_pdu *pdu_msg)////////////////Ö÷Òª½â°ü³ÌÐ
   }      
 }
 
-bool demux::process_ce(srslte::sch_subh *subh) {//Õâ¸öµØ·½Ó¦¸ÃÒªÐÞ¸Ä°¡°¡½á¹¹ÌåÀàÐÍ---switch·ÖÀà»ñµÃÐÅÏ¢Ö®ºó×öÊ²Ã´ÄØ£¬ÎÒÖªµÀÊ²Ã´²»ÖªµÀÈçºÎ×ö°¡
+bool demux::process_ce(srslte::sch_subh *subh) {//è¿™ä¸ªåœ°æ–¹åº”è¯¥è¦ä¿®æ”¹å•Šå•Šç»“æž„ä½“ç±»åž‹---switchåˆ†ç±»èŽ·å¾—ä¿¡æ¯ä¹‹åŽåšä»€ä¹ˆå‘¢ï¼Œæˆ‘çŸ¥é“ä»€ä¹ˆä¸çŸ¥é“å¦‚ä½•åšå•Š
 printf("1test HERE!\n");
   switch(subh->ce_type()) {printf("test HERE!\n");
     case srslte::sch_subh::CON_RES_ID:
       // Do nothing
       break;
     case srslte::sch_subh::TA_CMD:
-      ///phy_h->set_timeadv(subh->get_ta_cmd());---phy×¢ÊÍµôÁË
+      ///phy_h->set_timeadv(subh->get_ta_cmd());---phyæ³¨é‡ŠæŽ‰äº†
       Info("Received TA=%d\n", subh->get_ta_cmd());
       
       // Start or restart timeAlignmentTimer
-      //timers_db->get(mac::TIME_ALIGNMENT)->reset();ÐÞ¸Ä
-      //timers_db->get(mac::TIME_ALIGNMENT)->run();      ÐÞ¸Ä
+      //timers_db->get(mac::TIME_ALIGNMENT)->reset();ä¿®æ”¹
+      //timers_db->get(mac::TIME_ALIGNMENT)->run();      ä¿®æ”¹
       break;
     case srslte::sch_subh::PADDING:
       break;

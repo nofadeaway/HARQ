@@ -43,7 +43,9 @@ public:
   class process_callback
   {
     public: 
-      virtual void process_pdu(uint8_t *buff, uint32_t len) = 0;
+      //virtual void process_pdu(uint8_t *buff, uint32_t len) = 0;
+      process_callback();              //自己添加的5.22
+      void process_pdu(uint8_t *buff, uint32_t len);  //自己添加的5.22
   };
 
   pdu_queue();
