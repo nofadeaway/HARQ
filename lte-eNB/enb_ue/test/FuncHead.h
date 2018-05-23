@@ -27,6 +27,10 @@
 #include "../hdr/upper/rlc_um.h"
 #include "../hdr/mac/mux.h"
 #include "../hdr/mac/demux.h"
+
+#include "../hdr/common/pdu_queue.h"
+#include "../hdr/common/qbuff.h"
+
 class mac_dummy_timers
 	:public srslte::mac_interface_timers
 {

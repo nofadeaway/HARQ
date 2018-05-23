@@ -47,7 +47,7 @@ void pdu_queue::init(process_callback *callback_, log* log_h_)
   log_h     = log_h_; 
   for (int i=0;i<NOF_HARQ_PID;i++) {
     pdu_q[i].init(NOF_BUFFER_PDUS, MAX_PDU_LEN);
-    printf("The pdu queue of pid is %d!",i);   //用来测试
+    printf("The pdu queue of pid is %d!\n",i);   //用来测试
   }
   initiated = true; 
 }
@@ -129,10 +129,10 @@ bool pdu_queue::process_pdus()
     uint32_t cnt  = 0; 
     do {
       buff = (uint8_t*) pdu_q[i].pop(&len);
-      if (buff) {
+       if (buff) {
         //注释掉了
         if (callback) {
-          callback->process_pdu(buff, len);
+        callback->process_pdu(buff, len);
         }
         pdu_q[i].release();
         cnt++;

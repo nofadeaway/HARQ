@@ -9,7 +9,7 @@ rlc_um rlc3;
 mac_dummy_timers timers_test; 
 mux ue_mux_test;
 demux mac_demux_test;
-pdu_queue pdu_queue_test; //自己添加的PDU排队缓存,目前支持的HARQ进程数最多为8，既最多缓存8个PDU
+srslte::pdu_queue pdu_queue_test; //自己添加的PDU排队缓存,目前支持的HARQ进程数最多为8，既最多缓存8个PDU
  
 int tun_fd;// option;全局变量--rlc写入ip时用
 
@@ -197,9 +197,11 @@ int main(void)
 
 	log4.set_level(srslte::LOG_LEVEL_DEBUG);//
 
-	pdu_queue::process_callback callback_test;
+	pdu_queue::process_callback*  callback_test; //
+	callback_test = &mac_demux_test; // 5.23
 
-	pdu_queue_test.init(&callback_test,&log4);
+
+	pdu_queue_test.init(callback_test,&log4);
 /***********************************************
 	* ACK发送与接受，目前基站端接受，UE发送
 	*************************************************/
