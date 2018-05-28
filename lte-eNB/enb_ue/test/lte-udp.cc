@@ -6,6 +6,7 @@ using namespace srslte;
 using namespace srsue; 
   
 extern mux ue_mux_test;
+extern pdu_queue_test;   //5.28
 
 void* lte_send_udp(void *ptr) {
 
@@ -30,7 +31,8 @@ void* lte_send_udp(void *ptr) {
 
 	uint32_t pdu_sz_test = 300;//下面其实应该发送最终打包长度吧，待修改
 	uint32_t tx_tti_test = 1;
-	uint32_t pid_test = 1; //目前暂时只有1个进程
+	uint32_t pid_test = 8; //目前暂时只有1个进程
+	uint32_t pid_now = 0;
 
 	while (1) {
 		
@@ -38,9 +40,17 @@ void* lte_send_udp(void *ptr) {
 		memset(payload_back, 0, SEND_SIZE*sizeof(uint8_t));
 
 	     	//uint8_t* mux::pdu_get(uint8_t *payload, uint32_t pdu_sz, uint32_t tx_tti, uint32_t pid)
+  
+        
+		 
+		payload_back = ue_mux_test.pdu_get(payload_test, pdu_sz_test, tx_tti_test, pid_now);
+		printf("Now this pdu belongs to HARQ NO.%d",pid_now);
 		
-		payload_back = ue_mux_test.pdu_get(payload_test, pdu_sz_test, tx_tti_test, pid_test);
-		//5.22添加
+		
+		//begin{5.28添加}
+        pdu_queue_test.request_buffer(pid_now,pdu_sz_test);
+		//end{5.28添加}
+		
 		
 
 
@@ -51,6 +61,15 @@ void* lte_send_udp(void *ptr) {
 			break;
 		} 
 		sleep(1);
+
+		//5.28添加
+		pid_now=pid_now+1;   //循环发送8个进程
+		if(pid_now==8)
+		{
+			pid_now = 0;
+		}
+        //5.28添加
+
 	}
 
 	delete[] payload_back;

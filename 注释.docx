@@ -43,3 +43,10 @@ public:
    注释掉了demux初始化后，pdu_queue初始化信息消失，说明demux中使用到了pdu_queue
    demux.init()函数中包含了pdu.init(),其中pdu为srslte::pdu_queue pdus，所以此处调用了pdu_queue的init函数;
 
+mux中的PDU缓冲结构为：    写在定义于pdu.h
+     /* PDU Buffer */
+  srslte::sch_pdu    pdu_msg; 
+  bool msg3_has_been_transmitted;
+  
+   改动：在main中加了demux mac_demux_test_trans;来初始化一个pdu_queue
+        目前看到了 q_buff的push

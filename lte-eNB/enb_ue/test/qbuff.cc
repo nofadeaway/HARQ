@@ -56,8 +56,8 @@ bool qbuff::init(uint32_t nof_messages_, uint32_t max_msg_size_)  //nof_messages
   nof_messages = nof_messages_; 
   max_msg_size = max_msg_size_; 
   
-  buffer  = (uint8_t*) srslte_vec_malloc(nof_messages*max_msg_size);  
-  packets = (pkt_t*)   srslte_vec_malloc(nof_messages*sizeof(pkt_t));  
+  buffer  = (uint8_t*) srslte_vec_malloc(nof_messages*max_msg_size);   //从申请的空间来看，buffer是真正的存储空间，packets是buff的标识
+  packets = (pkt_t*)   srslte_vec_malloc(nof_messages*sizeof(pkt_t));     //pkt_t为一个定义在qbuff中的结构体，成员为是否有效，长度，指针
   if (buffer && packets) {
     bzero(buffer, nof_messages*max_msg_size);   //bzero 将字节字符串前n个字节置为0
     bzero(packets, nof_messages*sizeof(pkt_t));
@@ -74,7 +74,7 @@ void qbuff::flush()
   rp = 0; 
   for (int i=0;i<nof_messages;i++) {
     packets[i].valid = false; 
-    packets[i].ptr   = &buffer[i*max_msg_size];
+    packets[i].ptr   = &buffer[i*max_msg_size];   //pkt中指针指向申请的缓冲区
     packets[i].len   = 0; 
   }  
 }
@@ -103,7 +103,7 @@ bool qbuff::push(uint32_t len)
 {
   packets[wp].len = len; 
   packets[wp].valid = true; 
-  wp += (wp+1 >= nof_messages)?(1-nof_messages):1; 
+  wp += (wp+1 >= nof_messages)?(1-nof_messages):1;  //循环了
   return true; 
 }
 

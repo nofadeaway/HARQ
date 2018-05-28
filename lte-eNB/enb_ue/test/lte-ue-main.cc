@@ -9,6 +9,7 @@ rlc_um rlc3;
 mac_dummy_timers timers_test; 
 mux ue_mux_test;
 demux mac_demux_test;
+demux mac_demux_test_trans;      //用于发送方的，其中自动会有pdu_queue
 srslte::pdu_queue pdu_queue_test; //自己添加的PDU排队缓存,目前支持的HARQ进程数最多为8，既最多缓存8个PDU
  
 int tun_fd;// option;全局变量--rlc写入ip时用
@@ -162,7 +163,7 @@ int main(void)
 	rlc_um_tester_3    tester_3;
 	//mac_dummy_timers timers; 
  
-	rlc3.init(&log3, 3, &tester_3, &tester_3, &timers_test);//LCID=3!!!!!!
+	rlc3.init(&externlog3, 3, &tester_3, &tester_3, &timers_test);//LCID=3!!!!!!
 
 	LIBLTE_RRC_RLC_CONFIG_STRUCT cnfg;
 	cnfg.rlc_mode = LIBLTE_RRC_RLC_MODE_UM_BI;
@@ -191,17 +192,17 @@ int main(void)
 	/***********************************************
 	* MAC-PDU-Queue 将MAC的PDU存入缓冲队列
 	*************************************************/
-    // srslte::log_stdout log4("EnB_Queue");
-	// log4.set_level(srslte::LOG_LEVEL_DEBUG);
-	// log4.set_hex_limit(-1);
+    srslte::log_stdout log4("EnB_Queue");
+	log4.set_level(srslte::LOG_LEVEL_DEBUG);
+	log4.set_hex_limit(-1);
 
-	// log4.set_level(srslte::LOG_LEVEL_DEBUG);//
+	log4.set_level(srslte::LOG_LEVEL_DEBUG);//
 
-	// pdu_queue::process_callback*  callback_test; //
-	// callback_test = &mac_demux_test; // 5.23
+	pdu_queue::process_callback*  callback_test; //
+	callback_test = &mac_demux_test_trans; // 5.23
 
 
-	// pdu_queue_test.init(callback_test,&log4);
+	pdu_queue_test.init(callback_test,&log4);
 /***********************************************
 	* ACK发送与接受，目前基站端接受，UE发送
 	*************************************************/
