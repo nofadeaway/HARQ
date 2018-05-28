@@ -36,4 +36,10 @@ public:
 
   修改了pdu_queue.cc和pdu_queue.h
 
+  5.28
+ 探究为什么pdu_queue被初始化了2次
+ 注释掉了原程序中的pdu_queue 仍然发现pdu_queue初始化了，说明原程序已经调用了这个
+ 注释掉了main中的 mux初始化，仍然有pdu_queue初始化
+   注释掉了demux初始化后，pdu_queue初始化信息消失，说明demux中使用到了pdu_queue
+   demux.init()函数中包含了pdu.init(),其中pdu为srslte::pdu_queue pdus，所以此处调用了pdu_queue的init函数;
 

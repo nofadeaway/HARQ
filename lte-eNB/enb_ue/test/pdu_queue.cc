@@ -47,7 +47,7 @@ void pdu_queue::init(process_callback *callback_, log* log_h_)
   log_h     = log_h_; 
   for (int i=0;i<NOF_HARQ_PID;i++) {
     pdu_q[i].init(NOF_BUFFER_PDUS, MAX_PDU_LEN);
-    printf("The pdu queue of pid is %d!\n",i);   //用来测试
+    printf("FX The pdu queue of pid is %d!\n",i);   //用来测试
   }
   initiated = true; 
 }

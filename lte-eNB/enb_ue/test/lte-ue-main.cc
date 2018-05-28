@@ -191,17 +191,17 @@ int main(void)
 	/***********************************************
 	* MAC-PDU-Queue 将MAC的PDU存入缓冲队列
 	*************************************************/
-    srslte::log_stdout log4("EnB_Queue");
-	log4.set_level(srslte::LOG_LEVEL_DEBUG);
-	log4.set_hex_limit(-1);
+    // srslte::log_stdout log4("EnB_Queue");
+	// log4.set_level(srslte::LOG_LEVEL_DEBUG);
+	// log4.set_hex_limit(-1);
 
-	log4.set_level(srslte::LOG_LEVEL_DEBUG);//
+	// log4.set_level(srslte::LOG_LEVEL_DEBUG);//
 
-	pdu_queue::process_callback*  callback_test; //
-	callback_test = &mac_demux_test; // 5.23
+	// pdu_queue::process_callback*  callback_test; //
+	// callback_test = &mac_demux_test; // 5.23
 
 
-	pdu_queue_test.init(callback_test,&log4);
+	// pdu_queue_test.init(callback_test,&log4);
 /***********************************************
 	* ACK发送与接受，目前基站端接受，UE发送
 	*************************************************/
