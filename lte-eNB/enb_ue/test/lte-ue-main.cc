@@ -163,7 +163,7 @@ int main(void)
 	rlc_um_tester_3    tester_3;
 	//mac_dummy_timers timers; 
  
-	rlc3.init(&externlog3, 3, &tester_3, &tester_3, &timers_test);//LCID=3!!!!!!
+	rlc3.init(&log3, 3, &tester_3, &tester_3, &timers_test);//LCID=3!!!!!!
 
 	LIBLTE_RRC_RLC_CONFIG_STRUCT cnfg;
 	cnfg.rlc_mode = LIBLTE_RRC_RLC_MODE_UM_BI;

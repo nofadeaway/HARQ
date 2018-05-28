@@ -6,7 +6,7 @@ using namespace srslte;
 using namespace srsue; 
   
 extern mux ue_mux_test;
-extern pdu_queue_test;   //5.28
+extern srslte::pdu_queue pdu_queue_test;   //5.28
 
 void* lte_send_udp(void *ptr) {
 
