@@ -62,7 +62,7 @@ void pdu_queue::init(process_callback *callback_, log* log_h_)
 //   initiated = true; 
 // }
 
-uint8_t* pdu_queue::request_buffer(uint32_t pid, uint32_t len)
+uint8_t* pdu_queue::request_buffer(uint32_t pid, uint32_t len)    //这个函数最终是返回了qbuff中ptr的指针,ptr指向了buffer
 {  
   if (!initiated) {
     return NULL; 
@@ -76,7 +76,7 @@ uint8_t* pdu_queue::request_buffer(uint32_t pid, uint32_t len)
         log_h->console("Warning TX buffer HARQ PID=%d: Occupation is %.1f%% \n", 
                       pid, (float) 100*pdu_q[pid].pending_msgs()/pdu_q[pid].max_msgs());
       }
-      buff = (uint8_t*) pdu_q[pid].request();
+      buff = (uint8_t*) pdu_q[pid].request();    //qbuff::request(); return packets[wp].ptr; 返回了qbuff中packets的指针
       if (!buff) {
         Error("Error Buffer full for HARQ PID=%d\n", pid);
         log_h->error("Error Buffer full for HARQ PID=%d\n", pid);

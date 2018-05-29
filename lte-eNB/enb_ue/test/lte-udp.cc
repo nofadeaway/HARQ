@@ -33,6 +33,11 @@ void* lte_send_udp(void *ptr) {
 	uint32_t tx_tti_test = 1;
 	uint32_t pid_test = 8; //目前暂时只有1个进程
 	uint32_t pid_now = 0;
+    
+	//begin{5.29}
+	uint8_t* temp_buffer;
+    bool qbuff_flag=false;   //记录 qbuff::send()返回值
+	//end{5.29}
 
 	while (1) {
 		
@@ -44,14 +49,29 @@ void* lte_send_udp(void *ptr) {
         
 		 
 		payload_back = ue_mux_test.pdu_get(payload_test, pdu_sz_test, tx_tti_test, pid_now);
-		printf("Now this pdu belongs to HARQ NO.%d",pid_now);
+		printf("Now this pdu belongs to HARQ NO.%d\n",pid_now);
 		
 		
 		//begin{5.28添加}
-        pdu_queue_test.request_buffer(pid_now,pdu_sz_test);
+        temp_buffer=pdu_queue_test.request_buffer(pid_now,pdu_sz_test);
+		printf("PID No.%dqueue's buffer request succeeded!\n",pid_now);
+		
+		qbuff_flag=pdu_queue_test.pdu_q[pid_now].send(temp_buffer,pdu_sz_test);
+		if(qbuff_flag){
+			printf("Succeed in sending PDU to queue's buffer!\n");
+		}
+		else{
+			printf("Fail in sending PDU to queue's buffer!\n");
+		}
 		//end{5.28添加}
 		
+		/***********************************************
+	    *控制重发
+	    *************************************************/
+        bool ACK[8];    //目前HARQ进程最多8个
+
 		
+       /*******************************************/
 
 
 		if (sendto(st, payload_back, pdu_sz_test, 0, (struct sockaddr *) &addr,
@@ -62,7 +82,7 @@ void* lte_send_udp(void *ptr) {
 		} 
 		sleep(1);
 
-		//5.28添加
+		//FX:5.28添加
 		pid_now=pid_now+1;   //循环发送8个进程
 		if(pid_now==8)
 		{

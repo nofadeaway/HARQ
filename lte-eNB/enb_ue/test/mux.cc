@@ -32,7 +32,7 @@ void mux::init(rlc_interface_mac *rlc_, srslte::log *log_h_, bsr_proc *bsr_proce
   rlc        = rlc_;
   bsr_procedure = bsr_procedure_;
   phr_procedure = phr_procedure_;
-  printf("Mux process succeeds!");
+  printf("Mux process succeeds!\n");
 }
 
 void mux::reset()

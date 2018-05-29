@@ -50,3 +50,9 @@ mux中的PDU缓冲结构为：    写在定义于pdu.h
   
    改动：在main中加了demux mac_demux_test_trans;来初始化一个pdu_queue
         目前看到了 q_buff的push
+
+
+
+5.29 
+qbuff::init   srslte_vec_malloc 中 这个if里调用了posix_memalign(&ptr,32,size)已经申请成功了，所以再return
+qbuff::send 函数是真正的将数据存入的函数，其中还调用了qbuff::push函数

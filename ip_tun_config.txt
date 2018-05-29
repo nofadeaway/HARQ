@@ -1,0 +1,8 @@
+ifconfig enps30 192.168.3.254 netmask 255.255.255.0  //此为笔记本的无线网卡，有线为 wlp2s0？？
+ping 192.168.0.2
+
+openvpn --mktun --dev tun3
+
+ip link set tun3 up
+
+ip addr add 192.168.0.2/24 dev tun3

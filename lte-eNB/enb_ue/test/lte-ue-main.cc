@@ -190,7 +190,7 @@ int main(void)
 
 
 	/***********************************************
-	* MAC-PDU-Queue 将MAC的PDU存入缓冲队列
+	* MAC-PDU-Queue 将MAC的PDU存入缓冲队列    控制重发先写在lte-udp.cc里
 	*************************************************/
     srslte::log_stdout log4("EnB_Queue");
 	log4.set_level(srslte::LOG_LEVEL_DEBUG);
@@ -202,7 +202,7 @@ int main(void)
 	callback_test = &mac_demux_test_trans; // 5.23
 
 
-	pdu_queue_test.init(callback_test,&log4);
+	pdu_queue_test.init(callback_test,&log4);            //存入PDU的操作写在lte-udp.cc里面
 /***********************************************
 	* ACK发送与接受，目前基站端接受，UE发送
 	*************************************************/

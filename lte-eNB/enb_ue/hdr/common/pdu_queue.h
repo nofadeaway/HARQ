@@ -56,12 +56,14 @@ public:
   
   void     push_pdu(uint32_t pid, uint32_t nof_bytes);
     
+  std::vector<qbuff> pdu_q;    //PDU buffer   FX:5.29添加
+
 private:
   const static int NOF_HARQ_PID    = 8; 
   const static int MAX_PDU_LEN     = 150*1024/8; // ~ 150 Mbps  
   const static int NOF_BUFFER_PDUS = 64; // Number of PDU buffers per HARQ pid
         
-  std::vector<qbuff> pdu_q;    //PDU buffer
+  //std::vector<qbuff> pdu_q;    //PDU buffer     //FX:5.29 因为别的地方要调用，将其改为public
   process_callback *callback; 
   
   log       *log_h;
