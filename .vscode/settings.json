@@ -2,6 +2,14 @@
     "files.associations": {
         "*.tcc": "cpp",
         "*.ipp": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "array": "cpp",
+        "deque": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "slist": "cpp",
+        "initializer_list": "cpp",
+        "string_view": "cpp",
+        "valarray": "cpp"
     }
 }

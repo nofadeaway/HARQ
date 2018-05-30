@@ -72,6 +72,12 @@ namespace srslte {
     uint32_t pending_data(); 
     uint32_t pending_msgs(); 
     uint32_t max_msgs(); 
+
+    //FX
+    uint32_t rp_is();
+    uint32_t wp_is();
+    //FX
+
   private:
     typedef struct {
       bool valid; 
