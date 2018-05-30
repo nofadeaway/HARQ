@@ -12,7 +12,7 @@ void* lte_send_udp(void *ptr) {
 
 	printf("enter--lte_send_udp\n");
 
-	int port = atoi("4404");
+	int port = atoi("6604");
 	//create socket
 	int st = socket(AF_INET, SOCK_DGRAM, 0);
 	if (st == -1)
