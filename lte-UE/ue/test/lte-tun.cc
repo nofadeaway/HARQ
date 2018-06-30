@@ -8,6 +8,7 @@ using namespace srsue;
 * tun_alloc: allocates or reconnects to a tun/tap device. The caller
 *            must reserve enough space in *dev.
 **************************************************************************/
+
 int tun_alloc(char *dev, int flags) {
 
 	struct ifreq ifr;

@@ -138,7 +138,7 @@ uint8_t* sch_pdu::write_packet(srslte::log *log_h)
   }
   if (multibyte_padding) {//printf("testHERE4\n"); 
     header_sz += 1; 
-  } else if (onetwo_padding) {//printf("testHERE40\n"); 
+  } else if (onetwo_padding) {printf("testHERE40\n"); 
     header_sz += onetwo_padding;
   }
   if (ce_payload_sz + header_sz >= sdu_offset_start) {//printf("testHERE5\n"); 

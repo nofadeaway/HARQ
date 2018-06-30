@@ -6,15 +6,19 @@ using namespace srsue;
 pthread_t id[3];//3个线程
 
 rlc_um rlc3; 
+mac_dummy_timers timers_test; 
 mux ue_mux_test;
 demux mac_demux_test;
-mac_dummy_timers timers_test;
+demux mac_demux_test_trans;      //用于发送方的，其中自动会有pdu_queue
+srslte::pdu_queue pdu_queue_test; //自己添加的PDU排队缓存,目前支持的HARQ进程数最多为8，既最多缓存8个PDU
  
 int tun_fd;// option;全局变量--rlc写入ip时用
 
 /**************************************************************************
 * rlc-class
 **************************************************************************/
+
+
 class rlc_um_tester_3
 	:public pdcp_interface_rlc
 	, public rrc_interface_rlc
@@ -75,7 +79,7 @@ public:
 	{
 		if (lcid == 3) {
 
-			rlc3.write_pdu(payload, nof_bytes);
+			rlc3.write_pdu(payload, nof_bytes); 
 		}//else{//lcid==4以及其他
 		 //rlc4.write_pdu(payload,nof_bytes);printf("HERE4444\n");
 		 //}	
@@ -95,16 +99,16 @@ void thread_create(void){
 		printf("Thread 1 lte_send_ip_3 fail to create!\n");
 	else
 		printf("Thread 1 lte_send_ip_3 created\n");
- 
+	 
 	if( (temp = pthread_create(&id[1], NULL, lte_send_udp, NULL) != 0))
 		printf("Thread 2 lte_send_udp fail to create!\n");
 	else
 		printf("Thread 2 lte_send_udp created!\n");
 
-	// if( (temp = pthread_create(&id[2], NULL, lte_rece, NULL) != 0))
-	// 	printf("Thread 3 lte_rece fail to create!\n");
-	// else
-	// 	printf("Thread 3 lte_rece created!\n");
+	if( (temp = pthread_create(&id[2], NULL, lte_rece, NULL) != 0))
+		printf("Thread 3 lte_rece fail to create!\n");
+	else
+		printf("Thread 3 lte_rece created!\n");
 }
 
 
@@ -157,7 +161,7 @@ int main(void)
 	log3.set_hex_limit(-1);
 	
 	rlc_um_tester_3    tester_3;
-	mac_dummy_timers timers_test; 
+	//mac_dummy_timers timers; 
  
 	rlc3.init(&log3, 3, &tester_3, &tester_3, &timers_test);//LCID=3!!!!!!
 
@@ -184,6 +188,25 @@ int main(void)
 
 	ue_mux_test.init(&rlc_test, &log2, &bsr_test, &phr_test);
 
+
+	/***********************************************
+	* MAC-PDU-Queue 将MAC的PDU存入缓冲队列    控制重发先写在lte-udp.cc里
+	*************************************************/
+    srslte::log_stdout log4("EnB_Queue");
+	log4.set_level(srslte::LOG_LEVEL_DEBUG);
+	log4.set_hex_limit(-1);
+
+	log4.set_level(srslte::LOG_LEVEL_DEBUG);//
+
+	pdu_queue::process_callback*  callback_test; //
+	callback_test = &mac_demux_test_trans; // 5.23
+
+
+	pdu_queue_test.init(callback_test,&log4);            //存入PDU的操作写在lte-udp.cc里面
+/***********************************************
+	* ACK发送与接受，目前基站端接受，UE发送
+	*************************************************/
+
 	/***********************************************
 	* MAC-DEMUX
 	*************************************************/
@@ -196,10 +219,12 @@ int main(void)
 	log1.set_level(srslte::LOG_LEVEL_DEBUG);
 
 	mac_demux_test.init(&phy_interface_mac_test, &rlc_test, &log1);//,&timers_test);
-
+ 
 	printf("Main fuction,creating thread...\n");
 	thread_create();
 	printf("Main fuction, waiting for the pthread end!\n");
 	thread_wait();
 	return (0);
 }
+
+

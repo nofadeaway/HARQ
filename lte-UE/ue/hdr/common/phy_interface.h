@@ -35,7 +35,7 @@
 
 #include <stdint.h>
 #include <string>
-#include "srslte/srslte.h"
+#include "../srslte/srslte.h"
 
 #include "liblte_rrc.h"
 

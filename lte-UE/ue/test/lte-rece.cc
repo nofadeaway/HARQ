@@ -1,6 +1,6 @@
 #include "FuncHead.h"
 
-#define PAYLAODSIZE 400
+#define PAYLOAD_SIZE 400
 
 using namespace srslte;
 using namespace srsue;
@@ -8,7 +8,7 @@ using namespace srsue;
 extern demux mac_demux_test;
 extern mac_dummy_timers timers_test;
 /**************************************************************************
-* ipsend:´ÓtunÖÐ¶ÁÊý¾Ý²¢Ñ¹Èë¶ÓÁÐ
+* ipsend:ä»Žtunä¸­è¯»æ•°æ®å¹¶åŽ‹å…¥é˜Ÿåˆ—
 **************************************************************************/
 
 void* lte_rece(void *ptr) {
@@ -18,9 +18,9 @@ void* lte_rece(void *ptr) {
 	int st = socket(AF_INET, SOCK_DGRAM, 0);
 	if (st == -1) {
 		printf("open socket failed ! error message : %s\n", strerror(errno));
-		exit(1);//return -1;
+		exit(1);
 	}
-	int port = atoi("4404");
+	int port = atoi("5505");
 	 
 	struct sockaddr_in addr;
 	 
@@ -36,16 +36,18 @@ void* lte_rece(void *ptr) {
 	struct sockaddr_in client_addr;
 	socklen_t addrlen = sizeof(client_addr);
  
-	int rece_size = 300, k = 0;;//ÐÞ¸ÄÎªËæ»ú°¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡ 
-	uint8_t rece_payload[1000][PAYLAODSIZE] ={0};
-
+	int rece_size = 300, k=0;;//ä¿®æ”¹ä¸ºéšæœºå•Šï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼
+	uint8_t rece_payload[1000][PAYLOAD_SIZE] ={0};
+	 
 	while (1) {
 
 		if(k == 1000){
 			k = 0;
 		} 
 		 
-		memset(&client_addr, 0, sizeof(client_addr));
+		//ä½œç”¨æŠŠå†…å­˜æ¸…é›¶
+		memset(&client_addr, 0, sizeof(client_addr));   //void *memset(void *s, int ch, size_t n);å°†sä¸­å½“å‰ä½ç½®åŽé¢çš„nä¸ªå­—èŠ‚ ï¼ˆtypedef unsigned int size_t ï¼‰ç”¨ ch æ›¿æ¢å¹¶è¿”å›ž s 
+           
 
 		if (recvfrom(st, rece_payload[k], rece_size, 0, (struct sockaddr *)&client_addr, &addrlen) == -1) {
 
@@ -53,13 +55,12 @@ void* lte_rece(void *ptr) {
 			goto END;
 		}
 		else {
-			//MAC->RLC->IP µÚ¶þ¸ö²ÎÊýÓÐÎó,ÏÈ¹Ì¶¨Óë½ÓÊÕ¶ËÒ»ÖÂ,µ«ÊÇÃ²ËÆ²»Ó°Ïì½â°ü,¶ªÆúÁË
+			//MAC->RLC->IP ç¬¬äºŒä¸ªå‚æ•°æœ‰è¯¯,å…ˆå›ºå®šä¸ŽæŽ¥æ”¶ç«¯ä¸€è‡´,ä½†æ˜¯è²Œä¼¼ä¸å½±å“è§£åŒ…,ä¸¢å¼ƒäº†
 			mac_demux_test.process_pdu(rece_payload[k], rece_size);
-			 
-			while(!timers_test.get(-1)->is_expired()){ timers_test.get(-1)->step();}	
+			while(!timers_test.get(-1)->is_expired()){ timers_test.get(-1)->step();}		
 		}
-		k++;	
+		k++;
 	}
- 
-	END:close(st); 
+
+	END:close(st);
 }

@@ -32,6 +32,7 @@ void mux::init(rlc_interface_mac *rlc_, srslte::log *log_h_, bsr_proc *bsr_proce
   rlc        = rlc_;
   bsr_procedure = bsr_procedure_;
   phr_procedure = phr_procedure_;
+  printf("Mux process succeeds!\n");
 }
 
 void mux::reset()
@@ -136,7 +137,7 @@ uint8_t* mux::pdu_get(uint8_t *payload, uint32_t pdu_sz, uint32_t tx_tti, uint32
   pdu_msg.init_tx(payload, pdu_sz, true);
 
   // MAC control element for C-RNTI or data from UL-CCCH-----但是现在我们不接收来自CCCH的数据
-  /*if (!allocate_sdu(0, &pdu_msg, -1, NULL)) {
+  //if (!allocate_sdu(0, &pdu_msg, -1, NULL)) {
     if (pending_crnti_ce) {
       if (pdu_msg.new_subh()) {
         if (!pdu_msg.get()->set_c_rnti(pending_crnti_ce)) {
@@ -160,12 +161,12 @@ bool bsr_is_inserted = false;
     }
   }*/
   // MAC control element for PHR
-  /*float phr_value; 
+  float phr_value; 
   if (phr_procedure->generate_phr_on_ul_grant(&phr_value)) {
     if (pdu_msg.new_subh()) {
       pdu_msg.get()->set_phr(phr_value);
     }
-  }*/
+  }
   
   // data from any Logical Channel, except data from UL-CCCH;  
   // first only those with positive Bj
@@ -202,9 +203,9 @@ bool bsr_is_inserted = false;
 
   /* Generate MAC PDU and save to buffer */
   uint8_t *ret = pdu_msg.write_packet(log_h);          //pdu.cc 114
-printf("\n------------end_pdu_get----------------\n");
-printf("---------------------------------------\n\n");
- // pid_has_bsr[pid%MAX_HARQ_PROC] = bsr_is_inserted; 
+printf("------------end_pdu_get----------------\n");
+printf("---------------------------------------\n");
+ //pid_has_bsrpid_has_bsr[pid%MAX_HARQ_PROC] = bsr_is_inserted; 
  // if (bsr_is_inserted) {
  //   bsr_procedure->set_tx_tti(tx_tti);
  // }
@@ -228,7 +229,7 @@ bool mux::allocate_sdu(uint32_t lcid, srslte::sch_pdu* pdu_msg, int max_sdu_sz, 
 
   if (sdu_len > 0 && sdu_len<43855) { // there is pending SDU to allocate小于一个数而不是没有数字
 
-    //printf("\nhere_lcid = %d,max_sdu_sz = %d,rlc_buffer_sdu_len = %d\n",lcid,max_sdu_sz,sdu_len);///
+    printf("\nhere_lcid = %d,max_sdu_sz = %d,rlc_buffer_sdu_len = %d\n",lcid,max_sdu_sz,sdu_len);///
 
     int buffer_state = sdu_len; 
     if (sdu_len > max_sdu_sz && max_sdu_sz >= 0) {

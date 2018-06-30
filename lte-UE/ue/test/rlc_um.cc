@@ -1,7 +1,7 @@
 #include "FuncHead.h"
 
 extern int tun_fd;
-//extern pthread_mutex_t mut; //初始化静态互斥锁
+//extern pthread_mutex_t mut;//lock
 #define RX_MOD_BASE(x) (x-vr_uh-rx_window_size)%rx_mod
 
 using namespace srslte;
@@ -165,14 +165,14 @@ uint32_t rlc_um::get_total_buffer_state()
   return get_buffer_state();
 }
 
-int rlc_um::read_pdu(uint8_t *payload, uint32_t nof_bytes)
+int rlc_um::read_pdu(uint8_t *payload, uint32_t nof_bytes)  //payload带回最终组装的rlc_pdu包，nof_bytes为MAC给RLC反馈的包长度，返回值len为实际组包的长度
 {
   log->debug("MAC opportunity - %d bytes\n", nof_bytes);
  // log->debug("NOW--HERE\n");
   return build_data_pdu(payload, nof_bytes);
 }
 
-void rlc_um::write_pdu(uint8_t *payload, uint32_t nof_bytes)///////////////////////////////
+void rlc_um::write_pdu(uint8_t *payload, uint32_t nof_bytes)//msg记录的是数据包的地址，len为待处理数据包的长度。调用该函数后，程序会将数据包（msg记录的数据）送到RLC解包程序
 {
   boost::lock_guard<boost::mutex> lock(mutex);
   handle_data_pdu(payload, nof_bytes);
@@ -426,9 +426,9 @@ void rlc_um::reassemble_rx_sdus()
           rx_sdu->timestamp = bpt::microsec_clock::local_time();
 
           //pdcp->write_pdu(lcid, rx_sdu);
-//pthread_mutex_lock(&mut);
+//pthread_mutex_lock(&mut);//lock
 	cwrite(tun_fd, rx_sdu->msg, rx_sdu->N_bytes);
-//pthread_mutex_unlock(&mut);
+//pthread_mutex_unlock(&mut);//lock
 	printf("write into tun \n");
 
           rx_sdu = pool->allocate();
@@ -452,9 +452,10 @@ void rlc_um::reassemble_rx_sdus()
           rx_sdu->timestamp = bpt::microsec_clock::local_time();
 
           //pdcp->write_pdu(lcid, rx_sdu);
-//pthread_mutex_lock(&mut);
+//pthread_mutex_lock(&mut);//lock
 	cwrite(tun_fd, rx_sdu->msg, rx_sdu->N_bytes);
-//pthread_mutex_unlock(&mut);
+//pthread_mutex_unlock(&mut);//lock
+	
 	printf("write the last into tun!\n");
 
           rx_sdu = pool->allocate();
@@ -492,9 +493,9 @@ void rlc_um::reassemble_rx_sdus()
         rx_sdu->timestamp = bpt::microsec_clock::local_time();
 
         //pdcp->write_pdu(lcid, rx_sdu);
-//pthread_mutex_lock(&mut);
+//pthread_mutex_lock(&mut);//lock
 	cwrite(tun_fd, rx_sdu->msg, rx_sdu->N_bytes);
-//pthread_mutex_unlock(&mut);
+//pthread_mutex_unlock(&mut);//lock
 	printf("write new into tun \n");
         rx_sdu = pool->allocate();
       }
@@ -517,9 +518,10 @@ void rlc_um::reassemble_rx_sdus()
         rx_sdu->timestamp = bpt::microsec_clock::local_time();
 
         //pdcp->write_pdu(lcid, rx_sdu);
-//pthread_mutex_lock(&mut);
+//pthread_mutex_lock(&mut);//lock
 	cwrite(tun_fd, rx_sdu->msg, rx_sdu->N_bytes);
-//pthread_mutex_unlock(&mut);printf("write the last into tun \n");
+//pthread_mutex_unlock(&mut);//lock
+printf("write the last into tun \n");
 
         rx_sdu = pool->allocate();
       }

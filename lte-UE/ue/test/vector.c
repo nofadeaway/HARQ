@@ -335,7 +335,7 @@ void srslte_vec_deinterleave_real_cf(cf_t *x, float *real, uint32_t len) {
  */
 void *srslte_vec_malloc(uint32_t size) {
   void *ptr;
-  if (posix_memalign(&ptr,32,size)) {
+  if (posix_memalign(&ptr,32,size)) {   //这个if里调用了posix_memalign(&ptr,32,size)已经申请成功了，所以再return
     return NULL;
   } else {
     return ptr;

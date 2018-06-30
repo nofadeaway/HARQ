@@ -51,15 +51,15 @@ qbuff::~qbuff()
   free(packets);
 }
 
-bool qbuff::init(uint32_t nof_messages_, uint32_t max_msg_size_)
+bool qbuff::init(uint32_t nof_messages_, uint32_t max_msg_size_)  //nof_messages为64--nof_PDU,一个HARQ进程最多缓存多少个PDU；max_msg_size为单个PDU的最大长度
 {
   nof_messages = nof_messages_; 
   max_msg_size = max_msg_size_; 
   
-  buffer  = (uint8_t*) srslte_vec_malloc(nof_messages*max_msg_size);
-  packets = (pkt_t*)   srslte_vec_malloc(nof_messages*sizeof(pkt_t));  
+  buffer  = (uint8_t*) srslte_vec_malloc(nof_messages*max_msg_size);   //从申请的空间来看，buffer是真正的存储空间，packets是buff的标识
+  packets = (pkt_t*)   srslte_vec_malloc(nof_messages*sizeof(pkt_t));     //pkt_t为一个定义在qbuff中的结构体，成员为是否有效，长度，指针
   if (buffer && packets) {
-    bzero(buffer, nof_messages*max_msg_size);
+    bzero(buffer, nof_messages*max_msg_size);   //bzero 将字节字符串前n个字节置为0
     bzero(packets, nof_messages*sizeof(pkt_t));
     flush();
     return true; 
@@ -68,13 +68,13 @@ bool qbuff::init(uint32_t nof_messages_, uint32_t max_msg_size_)
   }
 }
 
-void qbuff::flush()
+void qbuff::flush()        //在init函数里面被调用了
 {
   wp = 0; 
   rp = 0; 
   for (int i=0;i<nof_messages;i++) {
     packets[i].valid = false; 
-    packets[i].ptr   = &buffer[i*max_msg_size];
+    packets[i].ptr   = &buffer[i*max_msg_size];   //pkt中指针指向申请的缓冲区 
     packets[i].len   = 0; 
   }  
 }
@@ -103,7 +103,7 @@ bool qbuff::push(uint32_t len)
 {
   packets[wp].len = len; 
   packets[wp].valid = true; 
-  wp += (wp+1 >= nof_messages)?(1-nof_messages):1; 
+  wp += (wp+1 >= nof_messages)?(1-nof_messages):1;  //循环了
   return true; 
 }
 
@@ -131,7 +131,7 @@ void* qbuff::pop(uint32_t* len, uint32_t idx)
   } else {
     uint32_t rpp = rp; 
     uint32_t i   = 0; 
-    while(i<idx && packets[rpp].valid) {
+    while(i<idx && packets[rpp].valid) {          //最终使得 rpp=rp+idx
       rpp += (rpp+1 >= nof_messages)?(1-nof_messages):1; 
       i++;
     }
@@ -153,12 +153,12 @@ void qbuff::release()
   rp += (rp+1 >= nof_messages)?(1-nof_messages):1; 
 }
 
-bool qbuff::send(void* buffer, uint32_t msg_size)
+bool qbuff::send(void* buffer, uint32_t msg_size)   //这个是真正的将数据写入qbuff存储的函数
 {
   if (msg_size <= max_msg_size) {
-    void *ptr = request();
+    void *ptr = request();         //request()是return packets[wp].ptr;
     if (ptr) {
-      memcpy(ptr, buffer, msg_size);
+      memcpy(ptr, buffer, msg_size); //void *memcpy(void *dest, const void *src, size_t n);从源src所指的内存地址的起始位置开始拷贝n个字节到目标dest所指的内存地址的起始位置中
       return push(msg_size);
     } else {
       printf("No ptr\n");
@@ -225,6 +225,18 @@ int qbuff::recv(void* buffer, uint32_t buffer_size)
   }
 }
 
+//FX
+uint32_t qbuff::rp_is()    //声明时不要掉了类名 qbuff::
+{
+  //uint32_t rp_temp=rp;
+  return rp;
+}
 
+uint32_t qbuff::wp_is()
+{
+  //uint32_t wp_temp=wp;
+  return wp;
+}
+//FX
 
 }

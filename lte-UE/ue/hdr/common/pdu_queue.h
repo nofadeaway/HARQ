@@ -43,8 +43,9 @@ public:
   class process_callback
   {
     public: 
-      //virtual void process_pdu(uint8_t *buff, uint32_t len) = 0;  //程序中原有的 
-      std::vector<bool> pro_callback_ACK(NOF_HARQ_PID,,false);     //自己加的用于ACK
+      virtual void process_pdu(uint8_t *buff, uint32_t len) = 0;
+      //process_callback();              //自己添加的5.22
+      //void process_pdu(uint8_t *buff, uint32_t len);  //自己添加的5.22
   };
 
   pdu_queue();
@@ -55,12 +56,14 @@ public:
   
   void     push_pdu(uint32_t pid, uint32_t nof_bytes);
     
+  std::vector<qbuff> pdu_q;    //PDU buffer   FX:5.29添加
+
 private:
   const static int NOF_HARQ_PID    = 8; 
   const static int MAX_PDU_LEN     = 150*1024/8; // ~ 150 Mbps  
   const static int NOF_BUFFER_PDUS = 64; // Number of PDU buffers per HARQ pid
         
-  std::vector<qbuff> pdu_q;
+  //std::vector<qbuff> pdu_q;    //PDU buffer     //FX:5.29 因为别的地方要调用，将其改为public
   process_callback *callback; 
   
   log       *log_h;
