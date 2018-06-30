@@ -57,9 +57,9 @@ mux中的PDU缓冲结构为：    写在定义于pdu.h
 qbuff::init   srslte_vec_malloc 中 这个if里调用了posix_memalign(&ptr,32,size)已经申请成功了，所以再return
 qbuff::send 函数是真正的将数据存入的函数，其中还调用了qbuff::push函数
 
-<<<<<<< HEAD
-5.30
-=======
 5.30
 给qbuff结构体写入了取出rp和wp的函数
->>>>>>> d2b67f2f3b51f37aceb1a2111260e1dbba7236d4
+
+6.30
+当前问题：加入最大重传次数，设置超时。  超时可以用发送来设置，最多等几个包。
+        考虑设置怎样的结构。
