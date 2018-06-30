@@ -45,7 +45,9 @@ void* lte_rece(void *ptr) {
 			k = 0;
 		} 
 		 
-		memset(&client_addr, 0, sizeof(client_addr));
+		//作用把内存清零
+		memset(&client_addr, 0, sizeof(client_addr));   //void *memset(void *s, int ch, size_t n);将s中当前位置后面的n个字节 （typedef unsigned int size_t ）用 ch 替换并返回 s 
+           
 
 		if (recvfrom(st, rece_payload[k], rece_size, 0, (struct sockaddr *)&client_addr, &addrlen) == -1) {
 

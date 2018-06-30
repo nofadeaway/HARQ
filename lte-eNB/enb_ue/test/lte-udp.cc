@@ -35,7 +35,7 @@ void* lte_send_udp(void *ptr) {
 	uint32_t pid_now = 0;
     
 	//begin{5.29}
-	uint8_t* temp_buffer;
+	uint8_t* payload_tosend = new uint8_t[SEND_SIZE];
     bool qbuff_flag=false;   //记录 qbuff::send()返回值
 	//end{5.29}
 
@@ -43,6 +43,7 @@ void* lte_send_udp(void *ptr) {
 		
 		memset(payload_test, 0, SEND_SIZE*sizeof(uint8_t));
 		memset(payload_back, 0, SEND_SIZE*sizeof(uint8_t));
+		memset(payload_tosend, 0, SEND_SIZE*sizeof(uint8_t));    //FX
 
 	     	//uint8_t* mux::pdu_get(uint8_t *payload, uint32_t pdu_sz, uint32_t tx_tti, uint32_t pid)
   
@@ -53,10 +54,10 @@ void* lte_send_udp(void *ptr) {
 		
 		
 		//begin{5.28添加}
-        temp_buffer=pdu_queue_test.request_buffer(pid_now,pdu_sz_test);
-		printf("PID No.%dqueue's buffer request succeeded!\n",pid_now);
+        if(pdu_queue_test.request_buffer(pid_now,pdu_sz_test))     //request_buffer函数返回指为qbuff中ptr指针，而在下面send中其实并不需要使用
+		{printf("PID No.%d:queue's buffer request succeeded!\n",pid_now);}
 		
-		qbuff_flag=pdu_queue_test.pdu_q[pid_now].send(temp_buffer,pdu_sz_test);
+		qbuff_flag=pdu_queue_test.pdu_q[pid_now].send(payload_back,pdu_sz_test);     //把payload)back存入qbuff
 		if(qbuff_flag){
 			printf("Succeed in sending PDU to queue's buffer!\n");
 		}
@@ -68,23 +69,47 @@ void* lte_send_udp(void *ptr) {
 		/***********************************************
 	    *控制重发
 	    *************************************************/
-        bool ACK[8];    //目前HARQ进程最多8个
-
+        bool ACK[8]={true,false,true,true,true,true,true,false};    //目前HARQ进程最多8个
+        if(ACK[pid_now])
+		{
+           payload_tosend = payload_back;
+		   printf("Now PID No.%d:queue's No.%d buffer will be sent.\n",pid_now,pdu_queue_test.pdu_q[pid_now].wp_is());
+		}    
+		else
+		{
+		   //memcpy(payload_tosend, pdu_queue_test.pdu_q[pid_now].pop(pdu_sz_test,1), pdu_sz_test);
+		   uint32_t len=pdu_sz_test;
+           payload_tosend =(uint8_t*) pdu_queue_test.pdu_q[pid_now].pop(&len);   //暂时是前7个进程一直ACK为true，第8个ACK一直为false
+		   printf("Now PID NO.%d:the retransmission size is %d bytes.",pid_now,len);
+		   printf("Now PID No.%d:queue's No.%d buffer will be sent.\n",pid_now,pdu_queue_test.pdu_q[pid_now].rp_is()+1);
+		}  
 		
        /*******************************************/
-
-
-		if (sendto(st, payload_back, pdu_sz_test, 0, (struct sockaddr *) &addr,
+       //FX：begin{发送udp}
+       if (sendto(st, payload_tosend, pdu_sz_test, 0, (struct sockaddr *) &addr,
 			sizeof(addr)) == -1)
 		{
 			printf("sendto failed ! error message :%s\n", strerror(errno));
 			break;
 		} 
 		sleep(1);
+       //FX：end{发送udp}
+       /**********************************/
+
+
+
+       //师兄的发送部分
+		// if (sendto(st, payload_back, pdu_sz_test, 0, (struct sockaddr *) &addr,
+		// 	sizeof(addr)) == -1)
+		// {
+		// 	printf("sendto failed ! error message :%s\n", strerror(errno));
+		// 	break;
+		// } 
+		// sleep(1);
 
 		//FX:5.28添加
 		pid_now=pid_now+1;   //循环发送8个进程
-		if(pid_now==8)
+		if(pid_now==2)
 		{
 			pid_now = 0;
 		}

@@ -225,6 +225,18 @@ int qbuff::recv(void* buffer, uint32_t buffer_size)
   }
 }
 
+//FX
+uint32_t qbuff::rp_is()    //声明时不要掉了类名 qbuff::
+{
+  //uint32_t rp_temp=rp;
+  return rp;
+}
 
+uint32_t qbuff::wp_is()
+{
+  //uint32_t wp_temp=wp;
+  return wp;
+}
+//FX
 
 }
