@@ -63,3 +63,8 @@ qbuff::send 函数是真正的将数据存入的函数，其中还调用了qbuff
 6.30
 当前问题：加入最大重传次数，设置超时。  超时可以用发送来设置，最多等几个包。
         考虑设置怎样的结构。
+
+7.31
+//int socket( int af, int type, int protocol); UDP（SOCK_DGRAM） 
+
+修改了 FuncHead.c   添加了ip-trans-data函数
