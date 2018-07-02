@@ -13,7 +13,7 @@ void* lte_send_udp(void *ptr) {
 
 	printf("enter--lte_send_udp\n");
 
-	int port = atoi("6604");
+	int port = atoi("6604");   //发送的端口号
 	//create socket
 	int st = socket(AF_INET, SOCK_DGRAM, 0);   //int socket( int af, int type, int protocol); UDP（SOCK_DGRAM）
 	if (st == -1)
