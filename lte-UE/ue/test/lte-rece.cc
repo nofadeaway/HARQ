@@ -27,7 +27,7 @@ void* lte_rece(void *ptr) {
 		printf("open socket failed ! error message : %s\n", strerror(errno));
 		exit(1);
 	}
-	int port = atoi("5505");
+	int port = atoi("6604");
 	 
 	struct sockaddr_in addr;
 	 
@@ -99,6 +99,10 @@ void* lte_rece(void *ptr) {
 		   memcpy(temp,&ack_reply,sizeof(ack_reply));
            if(sendto(st_a,temp,sizeof(ack_reply),0,(struct sockaddr *) &addr_a,sizeof(addr_a))==-1)
 		   {printf("ACK:sendto failed ! error message :%s\n", strerror(errno));}
+		   else
+		   {
+			   printf("\nACK succeed!\n");
+		   }
 		   //end
 
 			while(!timers_test.get(-1)->is_expired()){ timers_test.get(-1)->step();}		
