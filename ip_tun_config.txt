@@ -17,3 +17,8 @@ it-udp int port = atoi("4404");//端口，一方发一方收要一致
 		//}//else if((buffer[k][dst_ip_start]==192) && (buffer[k][dst_ip_start+1]==168) && (buffer[k][dst_ip_start+2]==2) && (buffer[k][dst_ip_start+3]==2))
 
 *******************************/
+
+
+对照 word文档里的图，tun0和tun0在同一个网段，下方的 eth1之间互为目的地址， eth1的地址和tun0的地址无关系
+7.2
+目前把我的笔记本当用户，设置为 192.

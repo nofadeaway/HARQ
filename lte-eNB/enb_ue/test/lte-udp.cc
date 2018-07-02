@@ -15,7 +15,7 @@ void* lte_send_udp(void *ptr) {
 
 	int port = atoi("6604");
 	//create socket
-	int st = socket(AF_INET, SOCK_DGRAM, 0);   //int socket( int af, int type, int protocol); UDP（SOCK_DGRAM）
+	int st = socket(AF_INET, SOCK_DGRAM, 0);   //int socket( int af, int type, int protocol); 使用UDP则第二个参数为（SOCK_DGRAM）
 	if (st == -1)
 	{
 		printf("create socket failed ! error message :%s\n", strerror(errno));

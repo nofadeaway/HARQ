@@ -68,3 +68,11 @@ qbuff::send 函数是真正的将数据存入的函数，其中还调用了qbuff
 //int socket( int af, int type, int protocol); UDP（SOCK_DGRAM） 
 
 修改了 FuncHead.c   添加了ip-trans-data函数
+
+7.2
+将UE端程序中 main函数中的 lte-udp线程去注释掉了
+修改UE端的receive程序，开始以结构体形式，发送ACK   端口5500
+修改了EnB端的receive程序，加入了接受端口5500发来的ACK
+
+问题： bind函数无法绑定ip，原因：ip地址不能为其他机器的地址。
+send()函数只能用于连接已经建立的情况，未建立连接时用sendto()

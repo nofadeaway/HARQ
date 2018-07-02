@@ -100,10 +100,11 @@ void thread_create(void){
 	else
 		printf("Thread 1 lte_send_ip_3 created\n");
 	 
-	if( (temp = pthread_create(&id[1], NULL, lte_send_udp, NULL) != 0))
-		printf("Thread 2 lte_send_udp fail to create!\n");
-	else
-		printf("Thread 2 lte_send_udp created!\n");
+	//FX 7.2 修改
+	// if( (temp = pthread_create(&id[1], NULL, lte_send_udp, NULL) != 0))
+	// 	printf("Thread 2 lte_send_udp fail to create!\n");
+	// else
+	// 	printf("Thread 2 lte_send_udp created!\n");
 
 	if( (temp = pthread_create(&id[2], NULL, lte_rece, NULL) != 0))
 		printf("Thread 3 lte_rece fail to create!\n");

@@ -7,6 +7,13 @@ using namespace srsue;
  
 extern demux mac_demux_test;
 extern mac_dummy_timers timers_test;
+extern bool ACK[8];
+
+struct A_ACK
+{
+	bool ack_0;
+};
+
 /**************************************************************************
 * ipsend:从tun中读数据并压入队列
 **************************************************************************/
@@ -20,7 +27,7 @@ void* lte_rece(void *ptr) {
 		printf("open socket failed ! error message : %s\n", strerror(errno));
 		exit(1);
 	}
-	int port = atoi("5505");
+	int port = atoi("5505");    //接受数据的端口
 	 
 	struct sockaddr_in addr;
 	 
@@ -38,7 +45,32 @@ void* lte_rece(void *ptr) {
  
 	int rece_size = 300, k=0;;//修改为随机啊！！！！！！！！！！！
 	uint8_t rece_payload[1000][PAYLOAD_SIZE] ={0};
+    
+
+	/****************************/
+	//ACK接受
+    int st_a = socket(AF_INET, SOCK_DGRAM, 0);
+	if (st_a == -1) {
+		printf("ACK:open socket failed ! error message : %s\n", strerror(errno));
+		exit(1);
+	}
+	int port_a = atoi("5500");
 	 
+	struct sockaddr_in addr_a;
+	 
+	addr_a.sin_family = AF_INET;
+	addr_a.sin_port = htons(port_a);
+	addr_a.sin_addr.s_addr = htonl(INADDR_ANY);
+	 
+	if (bind(st_a, (struct sockaddr *)&addr_a, sizeof(addr_a)) == -1) {
+		printf("ACK_receive:bind IP failed ! error message : %s\n", strerror(errno));
+		exit(1);
+	}
+    
+	
+	/****************************/
+
+
 	while (1) {
 
 		if(k == 1000){
@@ -59,8 +91,29 @@ void* lte_rece(void *ptr) {
 			mac_demux_test.process_pdu(rece_payload[k], rece_size);
 			while(!timers_test.get(-1)->is_expired()){ timers_test.get(-1)->step();}		
 		}
+
+		//FX   接受ACK
+		char temp[100];
+		A_ACK ack_reply;
+        //ack_reply.ack_0=true;
+		memset(temp,0,sizeof(temp));
+		
+        if(recv(st_a,temp,sizeof(ack_reply),0) == -1)
+        {
+			printf("ACK:recvfrom failed ! error message : %s\n", strerror(errno));
+		}
+		else{
+		    memcpy(&ack_reply,temp,sizeof(ack_reply));
+		    if(ack_reply.ack_0==true)
+		    {
+				ACK[0]=ack_reply.ack_0;
+				ACK[1]=ack_reply.ack_0;
+			}
+		}
+		//
 		k++;
 	}
 
 	END:close(st);
+	ENDD:close(st_a);
 }

@@ -7,6 +7,13 @@ using namespace srsue;
  
 extern demux mac_demux_test;
 extern mac_dummy_timers timers_test;
+
+//用于发送ACK
+struct A_ACK
+{
+	bool ack_0;
+};
+
 /**************************************************************************
 * ipsend:从tun中读数据并压入队列
 **************************************************************************/
@@ -38,6 +45,30 @@ void* lte_rece(void *ptr) {
  
 	int rece_size = 300, k=0;;//修改为随机啊！！！！！！！！！！！
 	uint8_t rece_payload[1000][PAYLOAD_SIZE] ={0};
+
+
+	/*********************************/
+    //begin{FX:发送ACK}
+	int port_a = atoi("5500");    //发送ACK端口
+	//create socket
+	int st_a = socket(AF_INET, SOCK_DGRAM, 0);
+	if (st_a == -1)
+	{
+		printf("create socket failed ! error message :%s\n", strerror(errno));
+	}
+
+	struct sockaddr_in addr_a;
+	memset(&addr_a, 0, sizeof(addr_a));
+	addr_a.sin_family = AF_INET;
+	addr_a.sin_port = htons(port_a);
+	addr_a.sin_addr.s_addr = inet_addr("192.168.3.4");//目的实际地址
+
+	// if (bind(st_a, (struct sockaddr *)&addr_a, sizeof(addr_a)) == -1) {
+	// 	printf("ACK:bind IP failed ! error message : %s\n", strerror(errno));
+	// 	exit(1);
+	// }
+	/********************************/
+	
 	 
 	while (1) {
 
@@ -57,10 +88,25 @@ void* lte_rece(void *ptr) {
 		else {
 			//MAC->RLC->IP 第二个参数有误,先固定与接收端一致,但是貌似不影响解包,丢弃了
 			mac_demux_test.process_pdu(rece_payload[k], rece_size);
+            printf("PDU received!");
+			//FX   发送ACK
+		   char temp[100];
+		   A_ACK ack_reply;
+           ack_reply.ack_0=true;
+		   if(k%3==0)
+		   {  ack_reply.ack_0=false; }
+		   memset(temp,0,sizeof(temp));
+		   memcpy(temp,&ack_reply,sizeof(ack_reply));
+           if(sendto(st_a,temp,sizeof(ack_reply),0,(struct sockaddr *) &addr_a,sizeof(addr_a))==-1)
+		   {printf("ACK:sendto failed ! error message :%s\n", strerror(errno));}
+		   //end
+
 			while(!timers_test.get(-1)->is_expired()){ timers_test.get(-1)->step();}		
 		}
+		
 		k++;
 	}
 
 	END:close(st);
+    close(st_a);
 }
