@@ -7,7 +7,7 @@ using namespace srsue;
 
 struct D_DCI
 {
-	unsigned int N_pid_now;
+	uint32_t N_pid_now;
 };    //结构体永远别忘了加分号...
 
 
@@ -110,13 +110,13 @@ void* lte_send_udp(void *ptr) {
 		
        
        	//FX   发送DCI
-		   char temp[100];
+		   char temp_DCI[100];
 		   D_DCI DCI_0;
            DCI_0.N_pid_now=pid_now;
 		   
-		   memset(temp,0,sizeof(temp));
-		   memcpy(temp,&DCI_0,sizeof(DCI_0));
-           if(sendto(st_a,temp,sizeof(DCI_0),0,(struct sockaddr *) &addr_a,sizeof(addr_a))==-1)
+		   memset(temp_DCI,0,sizeof(temp_DCI));
+		   memcpy(temp_DCI,&DCI_0,sizeof(DCI_0));
+           if(sendto(st_a,temp_DCI,sizeof(DCI_0),0,(struct sockaddr *) &addr_a,sizeof(addr_a))==-1)
 		   {printf("DCI:sendto failed ! error message :%s\n", strerror(errno));}
 		   else
 		   {
@@ -127,6 +127,11 @@ void* lte_send_udp(void *ptr) {
 
        /*******************************************/
        //FX：begin{发送udp}
+	   //添加一个轮询pid_now,如果当前这个pid_now的ACK正在被rece修改，则去取下一个
+
+
+
+	   //
 	   payload_tosend = trans_control(pid_now,pdu_sz_test);
        if (sendto(st, payload_tosend, pdu_sz_test, 0, (struct sockaddr *) &addr,
 			sizeof(addr)) == -1)

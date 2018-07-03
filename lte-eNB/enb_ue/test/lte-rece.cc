@@ -11,6 +11,7 @@ extern bool ACK[8];
 
 struct A_ACK
 {
+	uint32_t ACK_pid;
 	bool ack_0;
 };
 
@@ -104,11 +105,14 @@ void* lte_rece(void *ptr) {
 		}
 		else{
 		    memcpy(&ack_reply,temp,sizeof(ack_reply));
-		    if(ack_reply.ack_0==true)
-		    {
-				ACK[0]=ack_reply.ack_0;
-				ACK[1]=ack_reply.ack_0;
-			}
+            ACK[ack_reply.ACK_pid]=ack_reply.ack_0;
+			char str1[10]="true",str2[10]="false";
+			printf("No%d ACK received is %s",ack_reply.ACK_pid,(ack_reply.ack_0)?str1:str2);
+		    // if(ack_reply.ack_0==true)
+		    // {
+			// 	ACK[0]=ack_reply.ack_0;
+			// 	ACK[1]=ack_reply.ack_0;
+			// }
 		}
 		//
 		k++;

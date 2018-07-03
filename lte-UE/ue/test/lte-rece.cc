@@ -11,9 +11,13 @@ extern mac_dummy_timers timers_test;
 //用于发送ACK
 struct A_ACK
 {
+	uint32_t ACK_pid;
 	bool ack_0;
 };
-
+struct D_DCI
+{
+	uint32_t N_pid_now;
+};
 /**************************************************************************
 * ipsend:从tun中读数据并压入队列
 **************************************************************************/
@@ -45,6 +49,22 @@ void* lte_rece(void *ptr) {
  
 	int rece_size = 300, k=0;;//修改为随机啊！！！！！！！！！！！
 	uint8_t rece_payload[1000][PAYLOAD_SIZE] ={0};
+    /**********************************/
+	//接受DCI的socket
+	int st_DCI = socket(AF_INET, SOCK_DGRAM, 0);
+	if (st_DCI == -1) {
+		printf("DCI:open socket failed ! error message : %s\n", strerror(errno));
+		exit(1);
+	}
+	int port_DCI = atoi("5505");
+	 
+	struct sockaddr_in addr_DCI;
+	socklen_t addrlen_DCI = sizeof(addr_DCI);
+	 
+	addr_DCI.sin_family = AF_INET;
+	addr_DCI.sin_port = htons(port_DCI);
+	addr_DCI.sin_addr.s_addr = inet_addr("192.168.3.4");
+
 
 
 	/*********************************/
@@ -79,6 +99,20 @@ void* lte_rece(void *ptr) {
 		//作用把内存清零
 		memset(&client_addr, 0, sizeof(client_addr));   //void *memset(void *s, int ch, size_t n);将s中当前位置后面的n个字节 （typedef unsigned int size_t ）用 ch 替换并返回 s 
            
+        //接受DCI
+		char temp_DCI[100];
+		D_DCI dci;
+		memset(temp_DCI,0,sizeof(temp_DCI));
+        if (recvfrom(st_DCI, temp_DCI, sizeof(D_DCI), 0, (struct sockaddr *)&addr_DCI, &addrlen_DCI) == -1) {
+
+			printf("DCI:recvfrom failed ! error message : %s\n", strerror(errno));
+			
+		}
+		else{
+			memcpy(&dci,temp_DCI,sizeof(D_DCI));
+			printf("DCI recv succeed!The next PDU belongs to NO.%d.\n",dci.N_pid_now);
+		}
+		//
 
 		if (recvfrom(st, rece_payload[k], rece_size, 0, (struct sockaddr *)&client_addr, &addrlen) == -1) {
 
@@ -92,6 +126,7 @@ void* lte_rece(void *ptr) {
 			//FX   发送ACK
 		   char temp[100];
 		   A_ACK ack_reply;
+		   ack_reply.ACK_pid=dci.N_pid_now;
            ack_reply.ack_0=true;
 		   if(k%3==0)
 		   {  ack_reply.ack_0=false; }
@@ -101,7 +136,7 @@ void* lte_rece(void *ptr) {
 		   {printf("ACK:sendto failed ! error message :%s\n", strerror(errno));}
 		   else
 		   {
-			   printf("\nACK succeed!\n");
+			   printf("\nNO.%d:ACK succeed!\n",ack_reply.ACK_pid);
 		   }
 		   //end
 
