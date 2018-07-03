@@ -16,6 +16,7 @@
         "utility": "cpp",
         "tuple": "cpp",
         "system_error": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "cerrno": "cpp"
     }
 }
