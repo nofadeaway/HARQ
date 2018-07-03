@@ -79,19 +79,19 @@ void* lte_rece(void *ptr) {
 		} 
 		 
 		//作用把内存清零
-		memset(&client_addr, 0, sizeof(client_addr));   //void *memset(void *s, int ch, size_t n);将s中当前位置后面的n个字节 （typedef unsigned int size_t ）用 ch 替换并返回 s 
+		// memset(&client_addr, 0, sizeof(client_addr));   //void *memset(void *s, int ch, size_t n);将s中当前位置后面的n个字节 （typedef unsigned int size_t ）用 ch 替换并返回 s 
            
 
-		if (recvfrom(st, rece_payload[k], rece_size, 0, (struct sockaddr *)&client_addr, &addrlen) == -1) {
+		// if (recvfrom(st, rece_payload[k], rece_size, 0, (struct sockaddr *)&client_addr, &addrlen) == -1) {
 
-			printf("recvfrom failed ! error message : %s\n", strerror(errno));
-			goto END;
-		}
-		else {
-			//MAC->RLC->IP 第二个参数有误,先固定与接收端一致,但是貌似不影响解包,丢弃了
-			mac_demux_test.process_pdu(rece_payload[k], rece_size);
-			while(!timers_test.get(-1)->is_expired()){ timers_test.get(-1)->step();}		
-		}
+		// 	printf("recvfrom failed ! error message : %s\n", strerror(errno));
+		// 	goto END;
+		// }
+		// else {
+		// 	//MAC->RLC->IP 第二个参数有误,先固定与接收端一致,但是貌似不影响解包,丢弃了
+		// 	mac_demux_test.process_pdu(rece_payload[k], rece_size);
+		// 	while(!timers_test.get(-1)->is_expired()){ timers_test.get(-1)->step();}		
+		// }
 
 		//FX   接受ACK
 		char temp[100];
@@ -107,7 +107,8 @@ void* lte_rece(void *ptr) {
 		    memcpy(&ack_reply,temp,sizeof(ack_reply));
             ACK[ack_reply.ACK_pid]=ack_reply.ack_0;
 			char str1[10]="true",str2[10]="false";
-			printf("No%d ACK received is %s",ack_reply.ACK_pid,(ack_reply.ack_0)?str1:str2);
+			printf("/******lte-Recv:");
+			printf("No.%d ACK received is %s\n",ack_reply.ACK_pid,(ack_reply.ack_0)?str1:str2);
 		    // if(ack_reply.ack_0==true)
 		    // {
 			// 	ACK[0]=ack_reply.ack_0;

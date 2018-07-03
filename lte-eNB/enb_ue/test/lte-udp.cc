@@ -47,7 +47,7 @@ void* lte_send_udp(void *ptr) {
 	//end{5.29}
 
     //7.3begin{发送DCI}
-    int port_a = atoi("5505");    //发送DCI端口
+    int port_a = atoi("7707");    //发送DCI端口
 	//create socket
 	int st_a = socket(AF_INET, SOCK_DGRAM, 0);
 	if (st_a == -1)
@@ -115,12 +115,12 @@ void* lte_send_udp(void *ptr) {
            DCI_0.N_pid_now=pid_now;
 		   
 		   memset(temp_DCI,0,sizeof(temp_DCI));
-		   memcpy(temp_DCI,&DCI_0,sizeof(DCI_0));
+		   memcpy(temp_DCI,&DCI_0,sizeof(D_DCI));
            if(sendto(st_a,temp_DCI,sizeof(DCI_0),0,(struct sockaddr *) &addr_a,sizeof(addr_a))==-1)
 		   {printf("DCI:sendto failed ! error message :%s\n", strerror(errno));}
 		   else
 		   {
-			   printf("\nNO.%d:DCI succeed!\n",pid_now);
+			   printf("UDP trans begin! NO.%d:DCI succeed!\n",pid_now);
 		   }
 		//end
 	   
