@@ -14,6 +14,8 @@
         "fstream": "cpp",
         "istream": "cpp",
         "utility": "cpp",
-        "tuple": "cpp"
+        "tuple": "cpp",
+        "system_error": "cpp",
+        "list": "cpp"
     }
 }
