@@ -243,11 +243,11 @@ bool mux::allocate_sdu(uint32_t lcid, srslte::sch_pdu* pdu_msg, int max_sdu_sz, 
       if (pdu_msg->new_subh()) { // there is space for a new subheader
        // int sdu_len2 = sdu_len;这一步一点用都没有啊 
 
-printf("\nrequst_mac_sdu_len = %d\n\n",sdu_len);
+//printf("\nrequst_mac_sdu_len = %d\n\n",sdu_len);
 
         sdu_len = pdu_msg->get()->set_sdu(lcid, sdu_len, rlc);////////////////////////SET SDU pdu.cc-567
 
-printf("\nfinal_mac_sdu_len = %d\n\n",sdu_len);//
+//printf("\nfinal_mac_sdu_len = %d\n\n",sdu_len);//
 
         if (sdu_len > 0) { // new SDU could be added
           if (sdu_sz) {

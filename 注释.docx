@@ -83,5 +83,5 @@ send()函数只能用于连接已经建立的情况，未建立连接时用sendt
 
 
 7.4 注释掉了 rlc_um.cc 中所有 log->info
-    注释掉了 mux中各色printf
+    注释掉了 mux中各色printf debug
     注释掉了 demux中各色info debug
