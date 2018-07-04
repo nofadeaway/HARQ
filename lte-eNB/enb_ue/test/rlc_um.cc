@@ -51,30 +51,30 @@ void rlc_um::configure(LIBLTE_RRC_RLC_CONFIG_STRUCT *cnfg)
     rx_mod              = (RLC_UMD_SN_SIZE_5_BITS == rx_sn_field_length) ? 32 : 1024;
     tx_sn_field_length  = (rlc_umd_sn_size_t)cnfg->ul_um_bi_rlc.sn_field_len;
     tx_mod              = (RLC_UMD_SN_SIZE_5_BITS == tx_sn_field_length) ? 32 : 1024;
-    log->info("%s configured in %s mode: "
-              "t_reordering=%d ms, rx_sn_field_length=%u bits, tx_sn_field_length=%u bits\n",
-              rb_id_text[lcid], liblte_rrc_rlc_mode_text[cnfg->rlc_mode],
-              t_reordering,
-              rlc_umd_sn_size_num[rx_sn_field_length],
-              rlc_umd_sn_size_num[tx_sn_field_length]);
+    // log->info("%s configured in %s mode: "
+    //           "t_reordering=%d ms, rx_sn_field_length=%u bits, tx_sn_field_length=%u bits\n",
+    //           rb_id_text[lcid], liblte_rrc_rlc_mode_text[cnfg->rlc_mode],
+    //           t_reordering,
+    //           rlc_umd_sn_size_num[rx_sn_field_length],
+    //           rlc_umd_sn_size_num[tx_sn_field_length]);
     break;
   case LIBLTE_RRC_RLC_MODE_UM_UNI_UL:
     tx_sn_field_length  = (rlc_umd_sn_size_t)cnfg->ul_um_uni_rlc.sn_field_len;
     tx_mod              = (RLC_UMD_SN_SIZE_5_BITS == tx_sn_field_length) ? 32 : 1024;
-    log->info("%s configured in %s mode: tx_sn_field_length=%u bits\n",
-              rb_id_text[lcid], liblte_rrc_rlc_mode_text[cnfg->rlc_mode],
-              rlc_umd_sn_size_num[tx_sn_field_length]);
+    // log->info("%s configured in %s mode: tx_sn_field_length=%u bits\n",
+    //           rb_id_text[lcid], liblte_rrc_rlc_mode_text[cnfg->rlc_mode],
+    //           rlc_umd_sn_size_num[tx_sn_field_length]);
     break;
   case LIBLTE_RRC_RLC_MODE_UM_UNI_DL:
     t_reordering        = liblte_rrc_t_reordering_num[cnfg->dl_um_uni_rlc.t_reordering];
     rx_sn_field_length  = (rlc_umd_sn_size_t)cnfg->dl_um_uni_rlc.sn_field_len;
     rx_window_size      = (RLC_UMD_SN_SIZE_5_BITS == rx_sn_field_length) ? 16 : 512;
     rx_mod              = (RLC_UMD_SN_SIZE_5_BITS == rx_sn_field_length) ? 32 : 1024;
-    log->info("%s configured in %s mode: "
-              "t_reordering=%d ms, rx_sn_field_length=%u bits\n",
-              rb_id_text[lcid], liblte_rrc_rlc_mode_text[cnfg->rlc_mode],
-              liblte_rrc_t_reordering_num[t_reordering],
-              rlc_umd_sn_size_num[rx_sn_field_length]);
+    // log->info("%s configured in %s mode: "
+    //           "t_reordering=%d ms, rx_sn_field_length=%u bits\n",
+    //           rb_id_text[lcid], liblte_rrc_rlc_mode_text[cnfg->rlc_mode],
+    //           liblte_rrc_t_reordering_num[t_reordering],
+    //           rlc_umd_sn_size_num[rx_sn_field_length]);
     break;
   default:
     log->error("RLC configuration mode not recognized\n");
@@ -167,7 +167,7 @@ uint32_t rlc_um::get_total_buffer_state()
 
 int rlc_um::read_pdu(uint8_t *payload, uint32_t nof_bytes)  //payload带回最终组装的rlc_pdu包，nof_bytes为MAC给RLC反馈的包长度，返回值len为实际组包的长度
 {
-  log->debug("MAC opportunity - %d bytes\n", nof_bytes);
+  //log->debug("MAC opportunity - %d bytes\n", nof_bytes);
  // log->debug("NOW--HERE\n");
   return build_data_pdu(payload, nof_bytes);
 }
@@ -189,8 +189,8 @@ void rlc_um::timer_expired(uint32_t timeout_id)
     boost::lock_guard<boost::mutex> lock(mutex);
 
     // 36.322 v10 Section 5.1.2.2.4
-    log->info("%s reordering timeout expiry - updating vr_ur and reassembling\n",
-               rb_id_text[lcid]);
+    // log->info("%s reordering timeout expiry - updating vr_ur and reassembling\n",
+    //            rb_id_text[lcid]);
 
     log->warning("Lost PDU SN: %d\n", vr_ur);
     pdu_lost = true;
@@ -227,7 +227,7 @@ int  rlc_um::build_data_pdu(uint8_t *payload, uint32_t nof_bytes)
 {
   if(!tx_sdu && tx_sdu_queue.size() == 0)
   {
-    log->info("No data available to be sent\n");
+    // log->info("No data available to be sent\n");
     return 0;
   }
 
@@ -271,8 +271,8 @@ int  rlc_um::build_data_pdu(uint8_t *payload, uint32_t nof_bytes)
     tx_sdu->msg     += to_move;
     if(tx_sdu->N_bytes == 0)
     {
-      log->info("%s Complete SDU scheduled for tx. Stack latency: %ld us\n",
-                rb_id_text[lcid], tx_sdu->get_latency_us());
+      // log->info("%s Complete SDU scheduled for tx. Stack latency: %ld us\n",
+      //           rb_id_text[lcid], tx_sdu->get_latency_us());
       pool->deallocate(tx_sdu);
       tx_sdu = NULL;
     }
@@ -299,8 +299,8 @@ int  rlc_um::build_data_pdu(uint8_t *payload, uint32_t nof_bytes)
     tx_sdu->msg     += to_move;
     if(tx_sdu->N_bytes == 0)
     {
-      log->info("%s Complete SDU scheduled for tx. Stack latency: %ld us\n",
-                rb_id_text[lcid], tx_sdu->get_latency_us());
+      // log->info("%s Complete SDU scheduled for tx. Stack latency: %ld us\n",
+      //           rb_id_text[lcid], tx_sdu->get_latency_us());
       pool->deallocate(tx_sdu);
       tx_sdu = NULL;
     }
@@ -333,21 +333,21 @@ void rlc_um::handle_data_pdu(uint8_t *payload, uint32_t nof_bytes)
   rlc_umd_pdu_header_t header;
   rlc_um_read_data_pdu_header(payload, nof_bytes, rx_sn_field_length, &header);
 
-  log->info_hex(payload, nof_bytes, "RX %s Rx data PDU SN: %d",
-                rb_id_text[lcid], header.sn);
+  // log->info_hex(payload, nof_bytes, "RX %s Rx data PDU SN: %d",
+  //               rb_id_text[lcid], header.sn);
 
   if(RX_MOD_BASE(header.sn) >= RX_MOD_BASE(vr_uh-rx_window_size) &&
      RX_MOD_BASE(header.sn) <  RX_MOD_BASE(vr_ur))
   {
-    log->info("%s SN: %d outside rx window [%d:%d] - discarding\n",
-              rb_id_text[lcid], header.sn, vr_ur, vr_uh);
+    // log->info("%s SN: %d outside rx window [%d:%d] - discarding\n",
+    //           rb_id_text[lcid], header.sn, vr_ur, vr_uh);
     return;
   }
   it = rx_window.find(header.sn);
   if(rx_window.end() != it)
   {
-    log->info("%s Discarding duplicate SN: %d\n",
-              rb_id_text[lcid], header.sn);
+    // log->info("%s Discarding duplicate SN: %d\n",
+    //           rb_id_text[lcid], header.sn);
     return;
   }
 
@@ -422,7 +422,7 @@ void rlc_um::reassemble_rx_sdus()
           log->warning("Dropping remainder of lost PDU (lower edge middle segments, vr_ur=%d, vr_ur_in_rx_sdu=%d)\n", vr_ur, vr_ur_in_rx_sdu);
           rx_sdu->reset();
         } else {
-          log->info_hex(rx_sdu->msg, rx_sdu->N_bytes, "%s Rx SDU vr_ur=%d, i=%d (lower edge middle segments)", rb_id_text[lcid], vr_ur, i);
+          // log->info_hex(rx_sdu->msg, rx_sdu->N_bytes, "%s Rx SDU vr_ur=%d, i=%d (lower edge middle segments)", rb_id_text[lcid], vr_ur, i);
           rx_sdu->timestamp = bpt::microsec_clock::local_time();
 
           //pdcp->write_pdu(lcid, rx_sdu);
@@ -448,7 +448,7 @@ void rlc_um::reassemble_rx_sdus()
           log->warning("Dropping remainder of lost PDU (lower edge last segments)\n");
           rx_sdu->reset();          
         } else {
-          log->info_hex(rx_sdu->msg, rx_sdu->N_bytes, "%s Rx SDU vr_ur=%d (lower edge last segments)", rb_id_text[lcid], vr_ur);
+          // log->info_hex(rx_sdu->msg, rx_sdu->N_bytes, "%s Rx SDU vr_ur=%d (lower edge last segments)", rb_id_text[lcid], vr_ur);
           rx_sdu->timestamp = bpt::microsec_clock::local_time();
 
           //pdcp->write_pdu(lcid, rx_sdu);
@@ -489,7 +489,7 @@ void rlc_um::reassemble_rx_sdus()
         log->warning("Dropping remainder of lost PDU (update vr_ur middle segments, vr_ur=%d, vr_ur_in_rx_sdu=%d)\n", vr_ur, vr_ur_in_rx_sdu);
         rx_sdu->reset();
       } else {
-        log->info_hex(rx_sdu->msg, rx_sdu->N_bytes, "%s Rx SDU vr_ur=%d, i=%d, (update vr_ur middle segments)", rb_id_text[lcid], vr_ur, i);
+        // log->info_hex(rx_sdu->msg, rx_sdu->N_bytes, "%s Rx SDU vr_ur=%d, i=%d, (update vr_ur middle segments)", rb_id_text[lcid], vr_ur, i);
         rx_sdu->timestamp = bpt::microsec_clock::local_time();
 
         //pdcp->write_pdu(lcid, rx_sdu);
@@ -514,7 +514,7 @@ void rlc_um::reassemble_rx_sdus()
         log->warning("Dropping remainder of lost PDU (update vr_ur last segments)\n");
         rx_sdu->reset();
       } else {
-        log->info_hex(rx_sdu->msg, rx_sdu->N_bytes, "%s Rx SDU vr_ur=%d (update vr_ur last segments)", rb_id_text[lcid], vr_ur);
+        // log->info_hex(rx_sdu->msg, rx_sdu->N_bytes, "%s Rx SDU vr_ur=%d (update vr_ur last segments)", rb_id_text[lcid], vr_ur);
         rx_sdu->timestamp = bpt::microsec_clock::local_time();
 
         //pdcp->write_pdu(lcid, rx_sdu);
