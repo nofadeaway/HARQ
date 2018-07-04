@@ -15,6 +15,8 @@ struct A_ACK
 	bool ack_0;
 };
 
+pthread_mutex_t ACK_LOCK=PTHREAD_MUTEX_INITIALIZER;
+
 /**************************************************************************
 * ipsend:从tun中读数据并压入队列
 **************************************************************************/
@@ -105,7 +107,9 @@ void* lte_rece(void *ptr) {
 		}
 		else{
 		    memcpy(&ack_reply,temp,sizeof(ack_reply));
+			if(pthread_mutex_lock(&ACK_LOCK)!=0) { printf("RECE:Lock failed!\n"); }
             ACK[ack_reply.ACK_pid]=ack_reply.ack_0;
+			pthread_mutex_unlock(&ACK_LOCK);
 			char str1[10]="true",str2[10]="false";
 			printf("/******lte-Recv:");
 			printf("No.%d ACK received is %s\n",ack_reply.ACK_pid,(ack_reply.ack_0)?str1:str2);
