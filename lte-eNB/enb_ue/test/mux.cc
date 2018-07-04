@@ -115,7 +115,7 @@ void mux::pusch_retx(uint32_t tx_tti, uint32_t pid)
 // Multiplexing and logical channel priorization as defined in Section 5.4.3
 uint8_t* mux::pdu_get(uint8_t *payload, uint32_t pdu_sz, uint32_t tx_tti, uint32_t pid)
 {	
-  printf("\n\n\n");
+  printf("\n\n");
   printf("---------------------------------------\n");
   printf("------------start_pdu_get--------------\n");
   
@@ -229,7 +229,7 @@ bool mux::allocate_sdu(uint32_t lcid, srslte::sch_pdu* pdu_msg, int max_sdu_sz, 
 
   if (sdu_len > 0 && sdu_len<43855) { // there is pending SDU to allocate小于一个数而不是没有数字
 
-    printf("\nhere_lcid = %d,max_sdu_sz = %d,rlc_buffer_sdu_len = %d\n",lcid,max_sdu_sz,sdu_len);///
+    //printf("\nhere_lcid = %d,max_sdu_sz = %d,rlc_buffer_sdu_len = %d\n",lcid,max_sdu_sz,sdu_len);///
 
     int buffer_state = sdu_len; 
     if (sdu_len > max_sdu_sz && max_sdu_sz >= 0) {
