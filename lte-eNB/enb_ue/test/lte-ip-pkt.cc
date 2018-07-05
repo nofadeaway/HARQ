@@ -58,8 +58,8 @@ void* lte_send_ip_3(void *ptr) {
 
 		//sleep(1);  //linux下 \sleep(),里面变量单位是秒
 		//fx
-        usleep(200000);
-
+        usleep(1000);
+        
 		k++;	
 	}
 }

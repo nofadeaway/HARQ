@@ -141,7 +141,7 @@ void* lte_send_udp(void *ptr) {
 		} 
 
 
-		sleep(1);
+		usleep(200000);
        //FX：end{发送udp}
        /**********************************/
 
