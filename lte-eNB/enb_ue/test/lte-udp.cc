@@ -166,8 +166,8 @@ void* lte_send_udp(void *ptr) {
 
 	}
 
-	// delete[] payload_back;
-	// delete[] payload_test;
+	delete[] payload_back;
+	delete[] payload_test;
 	delete[] payload_tosend;
 
 	close(st);
