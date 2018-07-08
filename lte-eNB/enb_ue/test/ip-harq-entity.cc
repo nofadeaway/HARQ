@@ -7,7 +7,8 @@ using namespace srsue;
 
 extern mux ue_mux_test;
 extern srslte::pdu_queue pdu_queue_test;   //5.28
-bool ACK[8]={false,false,false,false,false,false,false,false};
+//bool ACK[8]={false,false,false,false,false,false,false,false};
+extern bool ACK[];
 extern pthread_mutex_t ACK_LOCK;
 
  void* pdu_store(uint32_t pid_now,uint8_t * payload_back,uint32_t pdu_sz_test) {

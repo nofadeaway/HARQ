@@ -58,5 +58,16 @@ int tun_alloc(char *, int);
 uint8_t* trans_control(uint32_t pid_now,uint32_t len);
 void* pdu_store(uint32_t pid_now,uint8_t* payload_back,uint32_t pdu_sz_test);
 
+struct D_DCI
+{
+	uint32_t N_pid_now;
+};    //结构体永远别忘了加分号...
+
+struct A_ACK
+{
+	uint32_t ACK_pid;
+	bool ack_0;
+};
+
 
 #endif

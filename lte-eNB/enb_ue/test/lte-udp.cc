@@ -5,10 +5,10 @@
 using namespace srslte;
 using namespace srsue; 
 
-struct D_DCI
-{
-	uint32_t N_pid_now;
-};    //结构体永远别忘了加分号...
+// struct D_DCI
+// {
+// 	uint32_t N_pid_now;
+// };    //结构体永远别忘了加分号...
 
 
 extern mux ue_mux_test;

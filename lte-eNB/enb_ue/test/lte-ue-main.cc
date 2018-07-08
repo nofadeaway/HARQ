@@ -11,6 +11,7 @@ mux ue_mux_test;
 demux mac_demux_test;
 demux mac_demux_test_trans;      //用于发送方的，其中自动会有pdu_queue
 srslte::pdu_queue pdu_queue_test; //自己添加的PDU排队缓存,目前支持的HARQ进程数最多为8，既最多缓存8个PDU
+bool ACK[8]={false,false,false,false,false,false,false,false};
  
 int tun_fd;// option;全局变量--rlc写入ip时用
 

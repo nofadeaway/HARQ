@@ -7,13 +7,14 @@ using namespace srsue;
  
 extern demux mac_demux_test;
 extern mac_dummy_timers timers_test;
-extern bool ACK[8];
+//extern bool ACK[8];
+extern bool ACK[];
 
-struct A_ACK
-{
-	uint32_t ACK_pid;
-	bool ack_0;
-};
+// struct A_ACK
+// {
+// 	uint32_t ACK_pid;
+// 	bool ack_0;
+// };
 
 pthread_mutex_t ACK_LOCK=PTHREAD_MUTEX_INITIALIZER;
 

@@ -17,6 +17,7 @@
         "tuple": "cpp",
         "system_error": "cpp",
         "list": "cpp",
-        "cerrno": "cpp"
+        "cerrno": "cpp",
+        "thread": "cpp"
     }
 }
