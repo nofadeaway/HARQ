@@ -18,6 +18,7 @@ extern srslte::pdu_queue pdu_queue_test;   //5.28
 void* lte_send_udp(void *ptr) {
 
 	printf("enter--lte_send_udp\n");
+	usleep(5000);
 
 	int port = atoi("6604");
 	//create socket
@@ -33,8 +34,8 @@ void* lte_send_udp(void *ptr) {
 	addr.sin_port = htons(port);
 	addr.sin_addr.s_addr = inet_addr("192.168.3.1");//目的实际地址
 
-	uint8_t *payload_test = new uint8_t[SEND_SIZE];
-	uint8_t *payload_back = new uint8_t[SEND_SIZE];
+	uint8_t* payload_test = new uint8_t[SEND_SIZE];
+	uint8_t* payload_back = new uint8_t[SEND_SIZE];
 
 	uint32_t pdu_sz_test = 300;//下面其实应该发送最终打包长度吧,待修改
 	uint32_t tx_tti_test = 1;
@@ -61,6 +62,7 @@ void* lte_send_udp(void *ptr) {
 	addr_a.sin_port = htons(port_a);
 	addr_a.sin_addr.s_addr = inet_addr("192.168.3.1");//目的实际地址
 	//7.3end{发送DCI}
+	sleep(1);
     
 	while (1) {
 		
