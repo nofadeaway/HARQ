@@ -18,6 +18,8 @@
         "system_error": "cpp",
         "list": "cpp",
         "cerrno": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "future": "cpp",
+        "variant": "cpp"
     }
 }

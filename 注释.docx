@@ -88,3 +88,8 @@ send()函数只能用于连接已经建立的情况，未建立连接时用sendt
 
 .7.5 
     在mux.inti（）里添加了一句 pthread_mutex_init(&mutex, NULL); 又改回去了
+
+7.6 
+    phr_procedure->generate_phr_on_ul_grant(&phr_value)  溢出为调用了此函数，在pdu_get()中，代码位于mux.cc
+
+    mac.h 中的mac类包含了全部的这些 各色全都有
