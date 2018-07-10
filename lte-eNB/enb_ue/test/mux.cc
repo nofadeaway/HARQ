@@ -161,7 +161,8 @@ bool bsr_is_inserted = false;
     }
   }*/
   // MAC control element for PHR
-  // float phr_value; 
+  //float phr_value;
+  //phr_procedure->generate_phr_on_ul_grant(&phr_value);
   // if (phr_procedure->generate_phr_on_ul_grant(&phr_value)) {
   //   if (pdu_msg.new_subh()) {
   //     pdu_msg.get()->set_phr(phr_value);

@@ -87,7 +87,7 @@ void* lte_rece(void *ptr) {
 	memset(&addr_a, 0, sizeof(addr_a));
 	addr_a.sin_family = AF_INET;
 	addr_a.sin_port = htons(port_a);
-	addr_a.sin_addr.s_addr = inet_addr("192.168.3.4");//目的实际地址
+	addr_a.sin_addr.s_addr = inet_addr("10.129.4.105");//目的实际地址
 
 	// if (bind(st_a, (struct sockaddr *)&addr_a, sizeof(addr_a)) == -1) {
 	// 	printf("ACK:bind IP failed ! error message : %s\n", strerror(errno));

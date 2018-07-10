@@ -32,7 +32,7 @@ void* lte_send_udp(void *ptr) {
 	memset(&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
-	addr.sin_addr.s_addr = inet_addr("192.168.3.1");//目的实际地址
+	addr.sin_addr.s_addr = inet_addr("10.129.4.106");//目的实际地址
 
 	uint8_t* payload_test = new uint8_t[SEND_SIZE];
 	uint8_t* payload_back = new uint8_t[SEND_SIZE];
@@ -60,7 +60,7 @@ void* lte_send_udp(void *ptr) {
 	memset(&addr_a, 0, sizeof(addr_a));
 	addr_a.sin_family = AF_INET;
 	addr_a.sin_port = htons(port_a);
-	addr_a.sin_addr.s_addr = inet_addr("192.168.3.1");//目的实际地址
+	addr_a.sin_addr.s_addr = inet_addr("10.129.4.106");//目的实际地址
 	//7.3end{发送DCI}
 	sleep(1);
     
